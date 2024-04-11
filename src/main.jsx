@@ -7,7 +7,6 @@ import { initializeApp } from "firebase/app";
 import { firebaseConfig } from './components/data/Services/firebaseConfig';
 const rootElement = document.getElementById('root');
 
-initializeApp(firebaseConfig)
 
 ReactDOM.createRoot(rootElement).render(
   <React.StrictMode>
