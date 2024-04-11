@@ -1,14 +1,15 @@
 import React from 'react'
-import { FaGoogle } from "react-icons/fa";
+import { FcGoogle } from "react-icons/fc";
+
 import { TailSpin } from 'react-loader-spinner';
 
-const LoginComponent = () => {
+const LoginComponent = ({ submitUserCredentialsForLogin, swapLoginSignup }) => {
 
     const handleLoginFormSubmit = e => {
         e.preventDefault()
         const email = e.target.email.value;
         const password = e.target.password.value;
-        console.log(email, password); 
+        submitUserCredentialsForLogin(email, password);
     }
 
     return (
@@ -16,10 +17,10 @@ const LoginComponent = () => {
             <p className=' text-2xl font-bold text-indigo-500'>Almost there,</p>
             <p className='mb-5'>Sign in to access your account or get started ...</p>
             <button
-                className='w-[90%] border-2 rounded-lg p-3 flex flex-row items-center'
+                className='w-[90%] border-2 rounded-lg p-2 flex flex-row items-center'
                 name='googleloginbtn'
             >
-                <FaGoogle color='red' />
+                <FcGoogle size={30}/>
                 <p className=' text-center w-full'>
                     Sign in with Google
                 </p>
@@ -40,7 +41,7 @@ const LoginComponent = () => {
                 </form>
                 <div className='flex flex-row text-sm justify-center mt-5 gap-1'>
                     <h1>Don't have an account?</h1>
-                    <h1 className='font-bold text-indigo-500 hover:underline '>Sign up</h1>
+                    <h1 onClick={() => swapLoginSignup("createaccount")} className='font-bold text-indigo-500 hover:underline '>Sign up</h1>
                 </div>
             </div>
         </div>
