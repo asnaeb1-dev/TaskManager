@@ -2,10 +2,9 @@ import React from 'react'
 import { Outlet, Navigate } from "react-router-dom";
 import { PATHS } from '../data/Utils/Strings';
 
-const PrivateRoutes = () => {
-    const auth = {token : false};
+const PrivateRoutes = ({ isAuthenticate = false }) => {
     return (
-        auth.token ? <Outlet /> : <Navigate to={PATHS.LOGIN_PATH} />
+        isAuthenticate ? <Outlet /> : <Navigate to={PATHS.LOGIN_PATH} />
     )
 }
 

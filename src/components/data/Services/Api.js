@@ -1,23 +1,51 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth"
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth"
 import { firebaseConfig } from "./firebaseConfig";
-initializeApp(firebaseConfig)
+import { ResponseType } from "../Utils/Strings";
+import Response from "../Utils/Response";
+initializeApp(firebaseConfig);
+
 const auth = getAuth();
 
 export const loginUserWithEmailAndPassword = async (email = "", password ="") => {
     try {
         const response = await signInWithEmailAndPassword(auth, email, password);
-        console.log(response);
+        return new Response(ResponseType.SUCCESS, response)
     } catch (e) {
-        console.log(e.code, e.message);
+        return new Response(ResponseType.ERROR, e);
     }
 }
 
 export const createAccountWithEmailAndPassword = async(email = "", password = "") => {
     try {
         const response = await createUserWithEmailAndPassword(auth, email, password);
-        console.log(response);
+        const responseObject = new Response(ResponseType.SUCCESS, response);
+        return responseObject;
     } catch(e) {
-        console.log(e.code, e.message);
+        const responseObject = new Response(ResponseType.SUCCESS, e);
+        return responseObject;
+
     }
+}
+
+export const isUserLoggedIn = () => {
+    const currentUser = auth.currentUser;
+    return !currentUser;
+}
+
+export const authenticateUsingGoogle = async () => {
+    const provider = new GoogleAuthProvider();
+    let authResponse;
+    try {
+        const response = await signInWithPopup(auth, provider);
+        const credentials = GoogleAuthProvider.credentialFromResult(response);
+        const token = credentials.accessToken;
+        const userInfo = response.user;
+        console.log("token: " + token);
+        authResponse = new Response(ResponseType.SUCCESS,{ token, userInfo })
+    }catch (e) {
+        authResponse = new Response(ResponseType.ERROR, e)
+
+    }
+    return authResponse;
 }

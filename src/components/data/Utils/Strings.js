@@ -9,3 +9,10 @@ export const PATHS = {
 export const APP_DESIGN_COLORS = {
     MAIN_COLOR: "#8c8bf9"
 }
+
+export const  ResponseType = {
+    SUCCESS: "success",
+    ERROR: "error",
+    INFO: "info",
+    LOADING: "loading"
+}

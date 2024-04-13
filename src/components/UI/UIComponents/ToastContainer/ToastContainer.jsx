@@ -65,27 +65,31 @@ const ToastContainer = ({ type = 0, message = "Hello World", duration = 1000, on
         }
     }
 
-    useEffect(() => {
-        let timer;
-        if(!isHover) {
-            timer = setTimeout(() => {
-                // onClose();
-            }, document.getElementById("pb").clientWidth / )
-        } else {
-            clearTimeout(timer);
-        }   
-        return () => setTimeout(timer);
-    }, [duration])
+    const getProgressBarColor = type => {
+        switch (type) {
+            case 0:
+                return "bg-blue-600";
+            case 1:
+                return "bg-emerald-600"
+            case 2:
+                return "bg-red-800";
+            case 3:
+                return "bg-yellow-600"
+            case 4:
+                return "bg-pink-600";
+        }
+    }
+
 
     if(!showToast) return;
     return createPortal(
-        <div onMouseOver={() => setHover(true)} onMouseOut={() => setHover(false)} className={`w-full h-20 fixed ${getToastStyles(type)}  z-10 bottom-0 rounded-t-lg flex flex-col`}>
-            <div id='pb' style={isHover ? {animationPlayState: "paused"} : {animationPlayState: "running"}} className={`bg-red-900 h-2 rounded-t-lg animateToast`}></div>
-            <div className='flex flex-row items-center h-full w-full px-2 gap-4'>
+        <div onMouseOver={() => setHover(true)} onMouseOut={() => setHover(false)} className={`w-full h-20 md:w-[350px] fixed ${getToastStyles(type)} z-10 bottom-0 md:top-2 md:right-2 rounded-t-lg md:rounded-lg flex flex-col`}>
+            <div id='pb' style={isHover ? {animationPlayState: "paused"} : {animationPlayState: "running"}} onAnimationEnd={onClose} className={`h-2 rounded-t-lg animateToast`} ></div>
+            <div className='flex flex-row items-center h-full w-full px-2 gap-2'>
                 <span className={`border-2 border-white rounded-full p-1 ${getToastAnim(type)}`}>
                     { getIcon(type) }
                 </span>
-                <div className='text-white overflow-hidden text-ellipsis whitespace-nowrap'>
+                <div className='text-white text-md overflow-hidden text-ellipsis whitespace-nowrap'>
                     {message}
                 </div>
             </div>

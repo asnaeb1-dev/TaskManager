@@ -1,9 +1,9 @@
 import React from 'react'
 import { FcGoogle } from "react-icons/fc";
 
-import { TailSpin } from 'react-loader-spinner';
+import { Oval } from 'react-loader-spinner';
 
-const LoginComponent = ({ submitUserCredentialsForLogin, swapLoginSignup }) => {
+const LoginComponent = ({ submitUserCredentialsForLogin, swapLoginSignup, isLoading, handleGoogleLogin }) => {
 
     const handleLoginFormSubmit = e => {
         e.preventDefault()
@@ -11,12 +11,13 @@ const LoginComponent = ({ submitUserCredentialsForLogin, swapLoginSignup }) => {
         const password = e.target.password.value;
         submitUserCredentialsForLogin(email, password);
     }
-
+    
     return (
         <div className='w-full flex items-center justify-center flex-col p-4'>
             <p className=' text-2xl font-bold text-indigo-500'>Almost there,</p>
             <p className='mb-5'>Sign in to access your account or get started ...</p>
             <button
+                onClick={handleGoogleLogin}
                 className='w-[90%] border-2 rounded-lg p-2 flex flex-row items-center'
                 name='googleloginbtn'
             >
@@ -35,8 +36,20 @@ const LoginComponent = ({ submitUserCredentialsForLogin, swapLoginSignup }) => {
                     <input name="email" className='w-full border-2 text-indigo-500 rounded-lg p-3 outline-indigo-500' placeholder='Email' type={"email"} />
                     <input name="password" className='w-full text-indigo-500 border-2 rounded-lg p-3 outline-indigo-500' placeholder='Password' type={"password"} />
                     <p className=' text-right text-sm text-indigo-500 font-bold hover:underline'>Forgot password?</p>
-                    <button className='border-2 bg-indigo-500 p-3 rounded-lg text-white text-sm border-indigo-500'>
-                        Log in
+                    <button className='border-2 bg-indigo-500 p-3 rounded-lg text-white text-sm border-indigo-500 flex items-center justify-center'>
+                        {
+                            !isLoading ?
+                            <p>Log in</p>:
+                            <Oval
+                                visible={isLoading}
+                                height="20"
+                                width="20"
+                                color="white"
+                                ariaLabel="oval-loading"
+                                wrapperStyle={{}}
+                                wrapperClass=""
+                            />
+                        }
                     </button>
                 </form>
                 <div className='flex flex-row text-sm justify-center mt-5 gap-1'>
