@@ -7,7 +7,6 @@ import { PATHS } from '../data/Utils/Strings';
 
 //components
 import Navbar from "../UI/UIComponents/NavBar/NavBar";
-import { isUserLoggedIn } from '../data/Services/Api';
 
 const RouterRoutes = () => {
     return (
@@ -16,8 +15,8 @@ const RouterRoutes = () => {
                 <Navbar />
             </div>
             <Routes>
-                <Route element={<PrivateRoutes isAuthenticate={isUserLoggedIn} />}>
-                    <Route path={PATHS.DASHBOARD} Component={HomePageScreen} />
+                <Route element={<PrivateRoutes />}>
+                    <Route path={PATHS.DASHBOARD} exact Component={HomePageScreen} />
                     {/* <Route path={PATHS.LANDING_PAGE} Component={Land} /> */}
                 </Route>
                 <Route path={PATHS.LOGIN_PATH} Component={LoginSignupScreen} />

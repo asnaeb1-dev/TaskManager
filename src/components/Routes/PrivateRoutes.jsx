@@ -1,10 +1,13 @@
 import React from 'react'
 import { Outlet, Navigate } from "react-router-dom";
 import { PATHS } from '../data/Utils/Strings';
+import { isUserLoggedIn } from '../data/Services/Api';
 
-const PrivateRoutes = ({ isAuthenticate = false }) => {
+const PrivateRoutes = () => {
+    console.log(isUserLoggedIn());
+    const isAuthenticated = false;
     return (
-        isAuthenticate ? <Outlet /> : <Navigate to={PATHS.LOGIN_PATH} />
+        isAuthenticated ? <Outlet /> : <Navigate to={PATHS.LOGIN_PATH} />
     )
 }
 
