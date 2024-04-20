@@ -51,6 +51,7 @@ const LoginSignupScreen = () => {
 				})
 			}
 			setLoading(false)
+			setUserCredentialsForLogin(LOGIN_OBJECT);
 		})()
 	}, [userCredentialsForLogin])
 
@@ -121,7 +122,7 @@ const LoginSignupScreen = () => {
 				message={toastProps.message}
 				type={toastProps.type}
 				duration={3000}
-				onClose={() => setShowToast(false)} 
+				onClose={() => setShowToast(true)} 
 			/>
 		</div>
 	)

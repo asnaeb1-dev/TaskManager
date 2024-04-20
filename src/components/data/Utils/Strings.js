@@ -16,3 +16,8 @@ export const  ResponseType = {
     INFO: "info",
     LOADING: "loading"
 }
+
+export const LOGIN_OBJECT = {
+    emailAddress: "",
+    password: ""
+}
