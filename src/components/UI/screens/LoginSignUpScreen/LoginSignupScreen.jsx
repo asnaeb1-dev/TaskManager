@@ -3,7 +3,7 @@ import LoginComponent from '../../UIComponents/LoginComponent/LoginComponent';
 import SignupComponent from '../../UIComponents/SignupComponent/SignupComponent';
 import { authenticateUsingGoogle, createAccountWithEmailAndPassword, isUserLoggedIn, loginUserWithEmailAndPassword } from '../../../data/Services/Api';
 import ToastContainer from '../../UIComponents/ToastContainer/ToastContainer';
-import { PATHS, ResponseType } from '../../../data/Utils/Strings';
+import { APP_TITLE, PATHS, ResponseType } from '../../../data/Utils/Strings';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 
@@ -26,7 +26,7 @@ const LoginSignupScreen = () => {
 	});
 
 	const [currentPage, setCurrentPage] = useState("login"); //createaccount | login
-	const [showToast, setShowToast] = useState(true);
+	const [showToast, setShowToast] = useState(false);
 	const [isLoading, setLoading] = useState(false);
 	const [toastProps, setToastProps] = useState({
 		type: 0,
@@ -66,7 +66,7 @@ const LoginSignupScreen = () => {
 		})()
 	}, [userCredentialsForLogin])
 
-	//sign up 
+	//create account 
 	const { 
 		mutate: createAccountMutation,
 		isError: createAccountHasError,
@@ -129,8 +129,9 @@ const LoginSignupScreen = () => {
 	}
 
 	return (
-		<div style={{ backgroundImage: `url(${BackImage})` }} className='w-full flex  bg-no-repeat bg-center bg-blend-overlay bg-white/70'>
-			<div className='w-full'>
+		<div style={{ backgroundImage: `url(${BackImage})` }} className='w-full h-full md:bg-white bg-no-repeat bg-bottom bg-blend-overlay bg-white/70'>
+			<div className='w-full h-full md:flex md:flex-row md:justify-center flex-auto'>
+				<div className='flex-1 h-full'>
 				{
 					currentPage === "login" ?
 					<LoginComponent
@@ -146,6 +147,14 @@ const LoginSignupScreen = () => {
 						submitUserCredentialsToCreateAccount={(email, password, username, dob) => handleUserCreateAccount({email, password, username, dob})}
 					/>
 				}
+				</div>
+				<div className='hidden flex-1 h-full md:flex bg-yellow-500/20 pt-20'>
+					<div className='w-full h-full flex flex-col gap-2'>
+						<img className='p-10 max-h-[60vh]' src={BackImage} />
+						<h1 className=' text-yellow-500 font-bold text-2xl text-center'>{APP_TITLE}</h1>
+						<h1 className='text-center'>Your daily note taking and task management app!</h1>
+					</div>
+				</div>
 			</div>
 			<ToastContainer
 				showToast={showToast}
