@@ -29,8 +29,9 @@ export const createAccountWithEmailAndPassword = async({email = "", password = "
 }
 
 export const isUserLoggedIn = () => {
-    const currentUser = auth.currentUser
-    return !currentUser;
+    const user = auth.currentUser;
+    console.log("current-", user);
+    return user;
 }
 
 export const authenticateUsingGoogle = async () => {

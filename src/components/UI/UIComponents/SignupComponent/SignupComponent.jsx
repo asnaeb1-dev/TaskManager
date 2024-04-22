@@ -1,8 +1,9 @@
 import React from 'react'
 import { MdEmail } from "react-icons/md";
+import { Oval } from 'react-loader-spinner';
 import { FaUser, FaLock, FaCalendarAlt } from "react-icons/fa";
 
-const SignupComponent = ({ submitUserCredentialsToCreateAccount, swapLoginSignup }) => {
+const SignupComponent = ({ submitUserCredentialsToCreateAccount, swapLoginSignup, isLoading }) => {
 
     const handleCreateAccountFormSubmit = e => {
         e.preventDefault()
@@ -50,8 +51,20 @@ const SignupComponent = ({ submitUserCredentialsToCreateAccount, swapLoginSignup
                         </span>
                         <input name="dob" className='w-full text-indigo-500 outline-none px-2' placeholder='Date of birth' type={"date"} />
                     </div>            
-                    <button className='border-2 bg-indigo-500 p-3 rounded-lg text-white text-sm border-indigo-500'>
-                        Create Account
+                    <button disabled={isLoading} className='border-2 bg-indigo-500 p-3 rounded-lg text-white text-sm border-indigo-500 flex items-center justify-center'>
+                        {
+                            !isLoading ?
+                            <p>Create Account</p>:
+                            <Oval
+                                visible={isLoading}
+                                height="20"
+                                width="20"
+                                color="white"
+                                ariaLabel="oval-loading"
+                                wrapperStyle={{}}
+                                wrapperClass=""
+                            />
+                        }
                     </button>
                 </form>
                 <div className='flex flex-row text-sm justify-center mt-5 gap-1'>
