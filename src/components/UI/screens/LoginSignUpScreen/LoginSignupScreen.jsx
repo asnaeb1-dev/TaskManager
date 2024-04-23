@@ -131,7 +131,7 @@ const LoginSignupScreen = () => {
 	return (
 		<div style={{ backgroundImage: `url(${BackImage})` }} className='w-full h-full md:bg-white bg-no-repeat bg-bottom bg-blend-overlay bg-white/70'>
 			<div className='w-full h-full md:flex md:flex-row md:justify-center flex-auto'>
-				<div className='flex-1 h-full'>
+				<div className='flex-1 h-full flex items-center pb-[8rem]'>
 				{
 					currentPage === "login" ?
 					<LoginComponent

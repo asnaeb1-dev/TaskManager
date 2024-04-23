@@ -4,7 +4,7 @@ import { PATHS } from '../data/Utils/Strings';
 import { isUserLoggedIn } from '../data/Services/Api';
 
 const PrivateRoutes = () => {
-    const isAuthenticated = false;
+    const isAuthenticated = true;
     return (
         isAuthenticated ? <Outlet /> : <Navigate to={PATHS.LOGIN_PATH} />
     )

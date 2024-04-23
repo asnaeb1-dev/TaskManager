@@ -12,7 +12,7 @@ const RouterRoutes = () => {
     return (
         <BrowserRouter>
             <div className=''>
-                <Navbar />
+                <Navbar type={1} />
             </div>
             <Routes>
                 <Route element={<PrivateRoutes />}>
