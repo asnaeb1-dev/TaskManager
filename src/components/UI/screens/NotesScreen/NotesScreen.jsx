@@ -5,7 +5,7 @@ const NotesScreen = () => {
     const [notesList, setNoteList] = useState([
         {
             id: 1,
-            title: "Feed the dogs",
+            title: "Feed the dogs vigeyovrevurev",
             description: "pirwuvguvirew",
             startTime: Date.now(),
             endTime: Date.now(),
@@ -142,7 +142,7 @@ const NotesScreen = () => {
                 {
                     notesList?.map((note, index) => {
                         return (
-                            <NotesItem index={index % 5} key={note.id} notesProps={note} />
+                            <NotesItem setsIsDone={() => } index={index % 5} key={note.id} notesProps={note} />
                         )
                     })
                 }

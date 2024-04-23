@@ -1,15 +1,33 @@
 import React from 'react'
 import { NOTES_COLOR } from '../../../data/Utils/Strings';
+import Draggable from 'react-draggable';
+import { MdModeEditOutline, MdDelete } from "react-icons/md";
+import { FaCheck } from "react-icons/fa";
+import { ImCross } from "react-icons/im";
 
-const NotesItem = ({ notesProps, index }) => {
-    const { title, description } = notesProps;
+const NotesItem = ({ notesProps, index, setsIsDone }) => {
+    const { title, description, isDone } = notesProps;
     return (
+        // <Draggable></Draggable>
         <div
             style={{ background: NOTES_COLOR[index] }}
-            className='w-full h-full rounded-2xl p-4  hover:shadow-2xl max-h-[200px] min-h-[200px]'
+            className='w-full flex flex-col select-none h-full rounded-2xl p-4 cursor-pointer  hover:shadow-2xl max-h-[250px] min-h-[250px]'
         >
-            <h1 className=' font-extrabold text-2xl text-zinc-700 overflow-hidden'>{title}</h1>
-            <p className='overflow-hidden'>{description}</p>
+            <div className='flex flex-col flex-1'>
+                <h1 className=' font-extrabold text-3xl text-zinc-700 overflow-hidden whitespace-nowrap text-ellipsis'>{title}</h1>
+                <p className='overflow-hidden max-h-[100px] py-1'>{description}</p>
+            </div>
+            <div className='w-full flex flex-row justify-end gap-3'>
+                <button className=' bg-white/50 p-2 rounded-full hover:bg-white/75'>
+                    <MdModeEditOutline size={20} />
+                </button>
+                <button className=' bg-white/50 p-2 rounded-full hover:bg-white/75'>
+                    <MdDelete size={20} />
+                </button>
+                <button role='done' onClick={() => setsIsDone()} className=' bg-white/50 p-2 rounded-full hover:bg-white/75'>
+                    {isDone ? <FaCheck size={20} /> : <ImCross size={18} />}
+                </button>
+            </div>
         </div>
     )
 }
