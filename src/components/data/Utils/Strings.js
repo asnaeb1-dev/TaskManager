@@ -7,8 +7,16 @@ export const PATHS = {
 };
 
 export const APP_DESIGN_COLORS = {
-    MAIN_COLOR: "#8c8bf9"
+    MAIN_COLOR: "rgb(234, 179, 8)"
 }
+
+export const NOTES_COLOR = [
+    "#e94452",
+    "#f68795",
+    "#23cce3",
+    "#75eab5",
+    "#ff9234"
+]
 
 export const  ResponseType = {
     SUCCESS: "success",

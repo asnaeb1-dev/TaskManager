@@ -1,11 +1,12 @@
 import React from 'react'
 import SideBar from '../../UIComponents/SideBar/SideBar'
+import NotesScreen from '../NotesScreen/NotesScreen'
 
 const HomePageScreen = () => {
 	return (
-		<div className='p-4'>
-			<h1>HomePage</h1>
+		<div>
 			<SideBar />
+			<NotesScreen />
 		</div>
 	)
 }
