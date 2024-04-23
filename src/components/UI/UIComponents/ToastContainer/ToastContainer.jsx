@@ -50,21 +50,6 @@ const ToastContainer = ({ type = 0, message = "Hello World", duration = 1000, on
         }
     }
 
-    const getToastAnim = type => {
-        switch (type) {
-            case 0:
-                return "animation-bounce";
-            case 1:
-                return "animate-bounce	"
-            case 2:
-                return "animate-pulse";
-            case 3:
-                return "bg-yellow-400/85"
-            case 4:
-                return "bg-pink-500/85";
-        }
-    }
-
     const getProgressBarColor = type => {
         switch (type) {
             case 0:
@@ -83,10 +68,14 @@ const ToastContainer = ({ type = 0, message = "Hello World", duration = 1000, on
 
     if(!showToast) return;
     return createPortal(
-        <div onMouseOver={() => setHover(true)} onMouseOut={() => setHover(false)} className={`w-full h-20 md:w-[350px] fixed ${getToastStyles(type)} z-10 bottom-0 md:top-2 md:right-2 rounded-t-lg md:rounded-lg flex flex-col`}>
-            <div id='pb' style={isHover ? {animationPlayState: "paused"} : {animationPlayState: "running"}} onAnimationEnd={onClose} className={`h-2 rounded-t-lg animateToast`} ></div>
-            <div className='flex flex-row items-center h-full w-full px-2 gap-2'>
-                <span className={`border-2 border-white rounded-full p-1 ${getToastAnim(type)}`}>
+        <div
+            onMouseOver={() => setHover(true)}
+            onMouseOut={() => setHover(false)}
+            className={`w-full h-20 md:w-[350px] fixed ${getToastStyles(type)} z-10 bottom-0 md:top-2 md:right-2 rounded-t-lg md:rounded-lg flex flex-col`}
+        >
+            <div style={isHover ? {animationPlayState: "paused"} : {animationPlayState: "running"}} onAnimationEnd={onClose} className={`h-2 rounded-t-lg animateToast ${getProgressBarColor(type)}`} ></div>
+            <div className='flex flex-row items-center h-full w-full px-4 gap-3 pb-[5px]'>
+                <span className={`border-2 border-white rounded-full p-1 animate-bounce`}>
                     { getIcon(type) }
                 </span>
                 <div className='text-white text-md overflow-hidden text-ellipsis whitespace-nowrap'>

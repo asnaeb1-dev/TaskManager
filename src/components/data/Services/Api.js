@@ -7,16 +7,16 @@ initializeApp(firebaseConfig);
 
 const auth = getAuth();
 
-export const loginUserWithEmailAndPassword = async (email = "", password ="") => {
+export const loginUserWithEmailAndPassword = async ({email = "", password =""}) => {
     try {
         const response = await signInWithEmailAndPassword(auth, email, password);
-        return new Response(ResponseType.SUCCESS, response)
+        return response
     } catch (e) {
-        return new Response(ResponseType.ERROR, e);
+        return e;
     }
 }
 
-export const createAccountWithEmailAndPassword = async(email = "", password = "") => {
+export const createAccountWithEmailAndPassword = async({email = "", password = ""}) => {
     try {
         const response = await createUserWithEmailAndPassword(auth, email, password);
         const responseObject = new Response(ResponseType.SUCCESS, response);
@@ -29,8 +29,9 @@ export const createAccountWithEmailAndPassword = async(email = "", password = ""
 }
 
 export const isUserLoggedIn = () => {
-    const currentUser = auth.currentUser;
-    return !currentUser;
+    const user = auth.currentUser;
+    console.log("current-", user);
+    return user;
 }
 
 export const authenticateUsingGoogle = async () => {
@@ -41,7 +42,6 @@ export const authenticateUsingGoogle = async () => {
         const credentials = GoogleAuthProvider.credentialFromResult(response);
         const token = credentials.accessToken;
         const userInfo = response.user;
-        console.log("token: " + token);
         authResponse = new Response(ResponseType.SUCCESS,{ token, userInfo })
     }catch (e) {
         authResponse = new Response(ResponseType.ERROR, e)
