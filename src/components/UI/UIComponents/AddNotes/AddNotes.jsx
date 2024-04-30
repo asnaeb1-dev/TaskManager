@@ -8,6 +8,8 @@ import { IoMdCheckmark } from "react-icons/io";
 import { RxCross1 } from "react-icons/rx";
 import { FaLock } from "react-icons/fa";
 
+import "./addnotes.css"
+
 const AddNotes = () => {
     const { isAddNotesOpen, setAddNotesOpen } = useContext(AddNotesContextInstance)
     const [colorSelected, setColorSelected] = useState("");
@@ -17,8 +19,8 @@ const AddNotes = () => {
 
     if (!isAddNotesOpen ) return null;
     return createPortal(
-        <div role='add-notes-portal' className='w-full h-full inset-0 bg-black/30 absolute z-10 flex justify-end'>
-            <div className='h-full w-[450px] flex flex-col rounded-tl-lg rounded-bl-lg bg-white p-4 z-20'>
+        <div role='add-notes-portal' className='w-full h-full inset-0 bg-black/30 absolute z-10 '>
+            <div className='h-full w-[450px] flex flex-col rounded-tl-lg rounded-bl-lg bg-white p-4 z-20 lg:`animateSlideIn absolute bottom-0 lg:right-0'>
                 <div role='titlebar' className='w-full flex flex-row-reverse justify-between items-center'>
                     <button onClick={() => setAddNotesOpen(false)} className=' hover:bg-yellow-500/25 p-2 rounded-full' role='close'>
                         <RxCross1 color={APP_DESIGN_COLORS.MAIN_COLOR} size={18} />
