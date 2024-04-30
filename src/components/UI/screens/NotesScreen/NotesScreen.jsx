@@ -138,11 +138,11 @@ const NotesScreen = () => {
     ]);
     return (
         <div className='w-[calc(100vw_-_5.3rem)] h-[calc(100vh_-_4rem)] overflow-y-scroll absolute z-[0] right-0 px-4 py-2'>
-            <div role='notesgrid' className='grid grid-cols-1 pt-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-7'>
+            <div role='notesgrid' className='grid grid-cols-1 pt-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-7 2xl:grid-cols-5'>
                 {
                     notesList?.map((note, index) => {
                         return (
-                            <NotesItem setsIsDone={() => } index={index % 5} key={note.id} notesProps={note} />
+                            <NotesItem index={index % 5} key={note.id} notesProps={note} />
                         )
                     })
                 }
