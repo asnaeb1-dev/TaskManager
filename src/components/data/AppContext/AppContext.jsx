@@ -5,9 +5,13 @@ export const TaskerAppContext = createContext();
 
 const AppContext = ({ children }) => {
     const [appState, setAppState] = useState();
-
+    const [navBarState, setNavBarState] = useState(0);
+    const contextState = {
+        appState, setAppState,
+        navBarState, setNavBarState
+    }
     return (
-        <TaskerAppContext.Provider value={{appState, setAppState}}>
+        <TaskerAppContext.Provider value={contextState}>
             <AddNotesContext>
                 {children}
             </AddNotesContext>

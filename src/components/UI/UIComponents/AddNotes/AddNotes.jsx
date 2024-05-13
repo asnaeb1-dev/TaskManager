@@ -2,13 +2,19 @@ import React, { useContext, useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { AddNotesContextInstance } from '../../../data/AppContext/AddNotesContext'
 
-import { APP_DESIGN_COLORS, NOTES_COLOR } from '../../../data/Utils/Strings';
+import { APP_DESIGN_COLORS, NOTES_COLOR, TaskPriority } from '../../../data/Utils/Strings';
 
-import { IoMdCheckmark } from "react-icons/io";
 import { RxCross1 } from "react-icons/rx";
 import { FaLock } from "react-icons/fa";
+import { IoIosFlag } from "react-icons/io";
 
 import "./addnotes.css"
+import ColorSelector from './AddNotesComponents/ColorSelector/ColorSelector';
+import PrioritySelector from './AddNotesComponents/PrioritySelector/PrioritySelector';
+import DurationPicker from './AddNotesComponents/DurationPicker/DurationPicker';
+import TaskStateSelector from './AddNotesComponents/TaskStateSelector/TaskStateSelector';
+import PrivacySelector from './AddNotesComponents/PrivacySelector/PrivacySelector';
+import TagPicker from './AddNotesComponents/TagPicker/TagPicker';
 
 const AddNotes = () => {
     const { isAddNotesOpen, setAddNotesOpen } = useContext(AddNotesContextInstance)
@@ -16,6 +22,22 @@ const AddNotes = () => {
     const handleNoteSubmit = e => {
         e.preventDefault()
     }
+
+    const [taskData, setTaskData] = useState({
+        taskTitle: "",
+        taskType: "",
+        isTaskPrivate: false,
+        taskPriority: TaskPriority.HIGH,
+        taskNoteColor: "",
+        taskTags: [],
+        taskStartTime: "",
+        taskEndTime: "",
+        taskDescription: ""
+    })
+
+    useEffect(() => {
+        console.log("color", colorSelected);
+    }, [colorSelected])
 
     if (!isAddNotesOpen ) return null;
     return createPortal(
@@ -48,9 +70,9 @@ const AddTaskHeader = ({ setAddNotesOpen }) => {
 
 const AddTaskForm = ({ handleNoteSubmit, colorSelected, setColorSelected }) => {
     return (
-        <form onSubmit={handleNoteSubmit} className='h-full flex flex-col gap-3 my-6'>
+        <div onSubmit={handleNoteSubmit} className='h-full flex flex-col gap-7 my-6 text-sm'>
             <div role='notetitle' className='w-full flex flex-row border-b-2 focus:border-yellow-500 pb-2'>
-                <select defaultValue={"def"} className=' outline-none rounded-lg p-2 bg-yellow-500/25 text-black'>
+                <select defaultValue={"def"} className=' outline-none font-semibold rounded-lg p-2 bg-yellow-500/25 text-black'>
                     <option value={"def"} disabled selected hidden>Select Todo Type</option>
                     <option value={"Task"}>Task</option>
                     <option value={"Habit"}>Habit</option>
@@ -66,40 +88,23 @@ const AddTaskForm = ({ handleNoteSubmit, colorSelected, setColorSelected }) => {
                     name='tasktitle'
                 />
             </div>
+            <PrivacySelector />
+            <PrioritySelector />
+            <TagPicker updateTagList={() => null} tagList={[]} />
             <ColorSelector
                 colorSelected={colorSelected}
-                handleColorSelect={e => setColorSelected(e.target.id)}
+                handleColorSelect={color => setColorSelected(color)}
             />
-            {/* <div className=''>
-                <button type={"submit"} className=' border-2 border-yellow-500 px-4 py-1 rounded-lg hover:bg-yellow-500 hover:text-white'>
+            <DurationPicker />
+            <div className='flex flex-col gap-2'>
+                <p className=' font-semibold'>Description</p>
+                <textarea placeholder='Task Description' className='border-2 text-yellow-500 focus:border-yellow-500 rounded-lg w-full min-h-[calc(100vh_-_740px)] max-h-[calc(100vh_-_740px)] outline-none p-2'></textarea>
+            </div>
+            <TaskStateSelector />
+            <div className='flex absolute items-center bg-white h-14 bottom-0'>
+                <button className=' bg-yellow-500/50 px-5 py-2 rounded-lg  hover:scale-105'>
                     Add Note
                 </button>
-            </div> */}
-        </form>
-    )
-}
-
-const ColorSelector = ({ handleColorSelect, colorSelected }) => {
-    return (
-        <div className='flex flex-row items-center'>
-            <p>Select note color</p>
-            <div onClick={e => handleColorSelect(e)} className='w-full h-7 flex flex-row gap-3'>
-                {
-                    NOTES_COLOR.map((color, index) => {
-                        return (
-                            <button
-                                key={color}
-                                id={`${color}`}
-                                style={{ background: color }}
-                                className={` w-10 h-10 flex outline-none items-center justify-center rounded-full ${colorSelected === color && " border-2 border-zinc-800"}`}
-                                type={"button"}
-                                role={"button"}
-                            >
-                                <IoMdCheckmark size={15} color={"black"} />
-                            </button>
-                        )
-                    })
-                }
             </div>
         </div>
     )

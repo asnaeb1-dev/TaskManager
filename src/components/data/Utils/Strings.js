@@ -7,15 +7,27 @@ export const PATHS = {
 };
 
 export const APP_DESIGN_COLORS = {
-    MAIN_COLOR: "rgb(234, 179, 8)"
+    MAIN_COLOR: "rgb(234, 179, 8)",
+    MAIN_COLOR_BGX: "rgba(234, 179, 8, .4)"
 }
+
+
+export const SELECT_NOTES_COLOR = "Select Note Color";
 
 export const NOTES_COLOR = [
     "#e94452",
     "#f68795",
     "#23cce3",
     "#75eab5",
-    "#ff9234"
+    "#ff9234",
+    "#323c45",
+    "#edf16a",
+    "#cee4f2",
+    "#ced6d9",
+    "#fae45c",
+    "#fad200",
+    "#e3e6f5",
+    "#71e8b2"
 ]
 
 export const  ResponseType = {
@@ -28,4 +40,10 @@ export const  ResponseType = {
 export const LOGIN_OBJECT = {
     emailAddress: "",
     password: ""
+}
+
+export const TaskPriority = {
+    MEDIUM: "medium",
+    LOW: "low",
+    HIGH: "high"
 }
