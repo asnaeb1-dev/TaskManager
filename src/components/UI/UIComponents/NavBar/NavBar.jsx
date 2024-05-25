@@ -1,11 +1,13 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { APP_TITLE } from '../../../data/Utils/Strings'
 import { MdDarkMode, MdLightMode } from "react-icons/md";
 import { FaSearch } from "react-icons/fa";
+import { TaskerAppContext } from '../../../data/AppContext/AppContext';
 
 const NavBar = ({ type = 0 }) => {
     const [darkMode, setDarkMode] = useState(false);
-    return type === 0 ? <LoginNavBar darkMode={darkMode} handleDarkMode={() => setDarkMode(!darkMode)} /> : <DashBoardNavBar darkMode={darkMode} handleDarkMode={() => setDarkMode(!darkMode)} />
+    const { navBarState, setNavBarState } = useContext(TaskerAppContext);
+    return navBarState === 0 ? <LoginNavBar darkMode={darkMode} handleDarkMode={() => setDarkMode(!darkMode)} /> : <DashBoardNavBar darkMode={darkMode} handleDarkMode={() => setDarkMode(!darkMode)} />
 }
 
 const LoginNavBar = ({ darkMode, handleDarkMode }) => {
@@ -17,7 +19,7 @@ const LoginNavBar = ({ darkMode, handleDarkMode }) => {
                 <h1>{APP_TITLE}</h1>
             </div>
             <div className='flex-1 flex items-center justify-end'>
-                <button className='border-2 border-yellow-500 rounded-full p-1' onClick={() => handleDarkMode()}>
+                <button className=' rounded-full p-1' onClick={() => handleDarkMode()}>
                     {darkMode ? <MdLightMode /> : <MdDarkMode />}
                 </button>
             </div>
@@ -54,7 +56,7 @@ const DashBoardNavBar = ({ darkMode, handleDarkMode }) => {
                 </form>
             </div>
             <div className='flex items-center justify-end'>
-                <button className='border-2 border-yellow-500 rounded-full p-2' onClick={() => handleDarkMode()}>
+                <button className=' rounded-full p-2' onClick={() => handleDarkMode()}>
                     {darkMode ? <MdLightMode size={25} /> : <MdDarkMode size={25} />}
                 </button>
             </div>

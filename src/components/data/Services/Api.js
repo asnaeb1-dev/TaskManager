@@ -1,9 +1,10 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth"
+import { getFirestore } from "firebase/firestore";
 import { firebaseConfig } from "./firebaseConfig";
 import { ResponseType } from "../Utils/Strings";
 import Response from "../Utils/Response";
-initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
 
 const auth = getAuth();
 
@@ -49,3 +50,5 @@ export const authenticateUsingGoogle = async () => {
     }
     return authResponse;
 }
+
+// export const addUser = ()

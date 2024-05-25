@@ -1,0 +1,13 @@
+.animateSlideIn {
+    animation: slideInRTL 0.4s linear forwards;
+}
+
+@keyframes slideInRTL {
+    from {
+        width: 0%;
+    }
+
+    to {
+        width: 500px;
+    }
+}
