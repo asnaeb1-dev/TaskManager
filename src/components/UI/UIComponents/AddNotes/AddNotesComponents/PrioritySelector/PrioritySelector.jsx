@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IoIosFlag } from "react-icons/io";
 import { TaskPriority } from "../../../../../data/Utils/Strings";
 
@@ -10,7 +10,7 @@ const PrioritySelector = ({ taskPriority, setTaskPriority}) => {
      * 2) medium
      * 3) high
      */
-    const [selected, setSelected] = useState(TaskPriority.HIGH)
+    const [selected, setSelected] = useState(taskPriority)
 
     const handleButtonSelect = e => {
         const id = e.target.id;
@@ -18,6 +18,10 @@ const PrioritySelector = ({ taskPriority, setTaskPriority}) => {
             setSelected(id)
         }
     }
+
+    useEffect(() => {
+        setTaskPriority(selected);
+    }, [selected])
 
     return (
         <div className="flex flex-col gap-2">

@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { MdCancel } from "react-icons/md";
 
 const TagPicker = ({ updateTagList }) => {
 
     const [tags, setTags] = useState([]);
     const [isFocused, setFocused] = useState(false);
+    const tagInputRef = useRef();
+    const [text, setText] = useState("");
 
     const handleTagSubmit = e => {
         e.preventDefault();
@@ -13,14 +15,22 @@ const TagPicker = ({ updateTagList }) => {
         } else {
             const tagName = e.target.tags.value;
             setTags(tagList  => [...tagList, tagName]);
+            updateTagList(tags);
         }
         e.target.reset();
     }
 
+    setTimeout(() => {
+        tagInputRef.current.addEventListener("keyup", e =>{
+            if (e.key === "Backspace") {
+                console.log("hello");
+                console.log(text)
+            }
+        })
+    }, 100)
 
-    useEffect(() => {
-        // updateTagList(tags);
-    }, [tags])
+
+    
 
     const handleTagRemove = (index) => {
         setTags((tagList) => tagList.filter((_, ind) => ind !== index));
@@ -45,6 +55,8 @@ const TagPicker = ({ updateTagList }) => {
                     }
                 </div>
                 <input
+                    ref={tagInputRef}
+                    onChange={e => setText(e.target.value)}
                     onFocus={() => setFocused(true)}
                     onBlur={() => setFocused(false)}
                     className='w-full outline-none'
