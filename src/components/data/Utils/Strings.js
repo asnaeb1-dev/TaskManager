@@ -3,7 +3,10 @@ export const APP_TITLE = "Tasker";
 export const PATHS = {
     LOGIN_PATH: "/login",
     DASHBOARD: "/dashboard",
-    LANDING_PAGE: "/"
+    LANDING_PAGE: "/",
+    TIMELINE: "/timeline",
+    FAVOURITES: "/favorites",
+    SETTINGS: "/settings",
 };
 
 export const APP_DESIGN_COLORS = {

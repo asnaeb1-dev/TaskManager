@@ -13,9 +13,7 @@ const HomePageScreen = () => {
 	}, [])
 	return (
 		<div>
-			<SideBar />
 			<NotesScreen />
-			<AddNotes />
 			<ToastContainer />
 		</div>
 	)

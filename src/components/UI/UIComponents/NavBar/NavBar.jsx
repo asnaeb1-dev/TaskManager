@@ -1,8 +1,9 @@
 import React, { useContext, useState } from 'react'
-import { APP_TITLE } from '../../../data/Utils/Strings'
+import { APP_TITLE, PATHS } from '../../../data/Utils/Strings'
 import { MdDarkMode, MdLightMode } from "react-icons/md";
 import { FaSearch } from "react-icons/fa";
 import { TaskerAppContext } from '../../../data/AppContext/AppContext';
+import { useLocation } from 'react-router-dom';
 
 const NavBar = ({ type = 0 }) => {
     const [darkMode, setDarkMode] = useState(false);
@@ -28,6 +29,7 @@ const LoginNavBar = ({ darkMode, handleDarkMode }) => {
 }
 
 const DashBoardNavBar = ({ darkMode, handleDarkMode }) => {
+    const locationPath = useLocation().pathname;
     const handleSearchSubmit = e => {
         e.preventDefault();
         console.log(e.target.searchitem.value);
@@ -47,7 +49,7 @@ const DashBoardNavBar = ({ darkMode, handleDarkMode }) => {
                         <input
                             className='w-full font-normal px-1 outline-none'
                             type={"text"}
-                            placeholder='Search task...' 
+                            placeholder={locationPath === PATHS.DASHBOARD ? 'Search task...' : (locationPath === PATHS.TIMELINE ? 'Search task in timeline...' : 'Search favourites...')} 
                             name='searchitem' 
                             spellCheck={true}
                         />
