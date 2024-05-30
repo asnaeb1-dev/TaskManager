@@ -5,10 +5,10 @@ export const TaskerAppContext = createContext();
 
 const AppContext = ({ children }) => {
     const [appState, setAppState] = useState();
-    const [navBarState, setNavBarState] = useState(0);
+    const [currentPage, setCurrentPage] = useState();
     const contextState = {
         appState, setAppState,
-        navBarState, setNavBarState
+        currentPage, setCurrentPage
     }
     return (
         <TaskerAppContext.Provider value={contextState}>

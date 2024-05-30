@@ -7,8 +7,7 @@ import { useLocation } from 'react-router-dom';
 
 const NavBar = ({ type = 0 }) => {
     const [darkMode, setDarkMode] = useState(false);
-    const { navBarState, setNavBarState } = useContext(TaskerAppContext);
-    return navBarState === 0 ? <LoginNavBar darkMode={darkMode} handleDarkMode={() => setDarkMode(!darkMode)} /> : <DashBoardNavBar darkMode={darkMode} handleDarkMode={() => setDarkMode(!darkMode)} />
+    return type === 0 ? <LoginNavBar darkMode={darkMode} handleDarkMode={() => setDarkMode(!darkMode)} /> : <DashBoardNavBar darkMode={darkMode} handleDarkMode={() => setDarkMode(!darkMode)} />
 }
 
 const LoginNavBar = ({ darkMode, handleDarkMode }) => {

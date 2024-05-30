@@ -16,6 +16,7 @@ export const APP_DESIGN_COLORS = {
 
 
 export const SELECT_NOTES_COLOR = "Select Note Color";
+export const EMPTY_NOTES = "No Tasks here";
 
 export const NOTES_COLOR = [
     "#e94452",

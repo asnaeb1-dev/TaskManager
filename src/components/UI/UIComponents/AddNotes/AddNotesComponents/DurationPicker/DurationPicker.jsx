@@ -2,7 +2,7 @@ import React from 'react'
 
 const DurationPicker = () => {
     return (
-        <div className='flex flex-col gap-2'>
+        <div className='flex flex-col gap-2 mt-8'>
             <p className=' font-semibold'>Pick task duration</p>
             <div className='flex flex-row gap-3 items-center'>
                 <p>Start time</p>
