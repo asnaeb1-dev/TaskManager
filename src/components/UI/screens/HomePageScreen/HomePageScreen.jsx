@@ -6,16 +6,9 @@ import AppContext, { TaskerAppContext } from '../../../data/AppContext/AppContex
 import ToastContainer from '../../UIComponents/ToastContainer/ToastContainer'
 
 const HomePageScreen = () => {
-	const {setNavBarState} = useContext(TaskerAppContext);
-	
-	useEffect(() => {
-		setNavBarState(1);
-	}, [])
 	return (
 		<div>
-			<SideBar />
 			<NotesScreen />
-			<AddNotes />
 			<ToastContainer />
 		</div>
 	)

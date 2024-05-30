@@ -6,7 +6,7 @@ import { APP_DESIGN_COLORS, NOTES_COLOR, TaskPriority } from '../../../data/Util
 
 import { RxCross1 } from "react-icons/rx";
 
-import "./addnotes.css"
+// import "./addnotes.css"
 import ColorSelector from './AddNotesComponents/ColorSelector/ColorSelector';
 import PrioritySelector from './AddNotesComponents/PrioritySelector/PrioritySelector';
 import DurationPicker from './AddNotesComponents/DurationPicker/DurationPicker';
@@ -20,7 +20,7 @@ const AddNotes = () => {
     if (!isAddNotesOpen ) return null;
     return createPortal(
         <div role='add-notes-portal' className='w-full h-full inset-0 bg-black/30 absolute z-10 '>
-            <div className={`h-full w-[500px] flex flex-col rounded-tl-lg rounded-bl-lg bg-white p-4 z-20 absolute animateSlideIn  lg:right-0`}>
+            <div className={`h-[90%] rounded-tr-lg bottom-0 w-full md:h-full lg:w-[500px] flex flex-col rounded-tl-lg rounded-bl-lg bg-white p-4 z-20 absolute animateSlideIn md:right-0`}>
                 <AddTaskHeader setAddNotesOpen={() => setAddNotesOpen(false)} />
                 <AddTaskForm />
             </div>
@@ -126,11 +126,11 @@ const AddTaskForm = ({ handleNoteSubmit }) => {
             <DurationPicker />
             <div className='flex flex-col gap-2'>
                 <p className=' font-semibold'>Description</p>
-                <textarea onChange={e => updateTaskData("desc", e.target.value)} placeholder='Task Description' className='border-2 text-yellow-500 focus:border-yellow-500 rounded-lg w-full h-[calc(100vh_-_740px)] min-h-[calc(100vh_-_740px)] max-h-[calc(100vh_-_740px)] outline-none p-2'></textarea>
+                <textarea onChange={e => updateTaskData("desc", e.target.value)} placeholder='Task Description' className='border-2 text-yellow-500 focus:border-yellow-500 rounded-lg w-full h-[100px]  lg:h-[calc(100vh_-_740px)] lg:min-h-[calc(100vh_-_740px)] lg:max-h-[calc(100vh_-_740px)] outline-none p-2'></textarea>
             </div>
             <TaskStateSelector />
             <div className='flex absolute items-center bg-white h-14 bottom-0'>
-                <button className=' bg-yellow-500/50 px-5 py-2 rounded-lg  hover:scale-105'>
+                <button className=' bg-yellow-500/50 px-5 py-2 rounded-lg font-semibold  hover:scale-105'>
                     Add Note
                 </button>
             </div>

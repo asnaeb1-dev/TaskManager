@@ -1,15 +1,36 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { FaClipboardList, FaCalendarTimes, FaCog, FaChevronRight, FaChevronLeft } from "react-icons/fa";
 import { MdFavorite } from "react-icons/md";
 import { IoMdAdd } from "react-icons/io";
 
-import { APP_DESIGN_COLORS } from '../../../data/Utils/Strings';
+import { APP_DESIGN_COLORS, PATHS } from '../../../data/Utils/Strings';
 import { TaskerAppContext } from '../../../data/AppContext/AppContext';
 import { AddNotesContextInstance } from '../../../data/AppContext/AddNotesContext';
+import { useLocation, useNavigate } from 'react-router-dom';
 const SideBar = () => {
+	const navigate = useNavigate();
+	const location = useLocation();
 	const [isSidebarCollapsed, setSidebarCollapsed] = useState(true);
-	const buttons = ["Add Notes","Notes", "Timeline", "Favorites", "Settings"];
+	const [isMouseHovering, setMouseHovering] = useState(false);
 	const { isAddNotesOpen, setAddNotesOpen } = useContext(AddNotesContextInstance);
+	const buttons = [
+		{
+			btnTitle: "Add Notes",
+			btnPath: "***"
+		},{
+			btnTitle: "Notes",
+			btnPath: "dashboard"
+		}, {
+			btnTitle: "Timeline",
+			btnPath: "timeline"
+		}, {
+			btnTitle: "Favorites",
+			btnPath: "favorites"
+		}, {
+			btnTitle: "Settings",
+			btnPath: "settings"
+		}
+	];
 	
 	const getIcons = index => {
 		switch (index) {
@@ -32,10 +53,23 @@ const SideBar = () => {
 
 	const handleSideBarOptionsInteractions = e => {
 		const id = e.target.id;
+		console.log(id);
 		switch (id) {
 			case "Add Notes":
 				setAddNotesOpen(!isAddNotesOpen)
 				return;
+			case "Notes":
+				navigate(PATHS.DASHBOARD)
+				return;
+			case "Timeline":
+				navigate(PATHS.TIMELINE)
+				return;
+			case "Favorites":
+				navigate(PATHS.FAVOURITES)
+				return;
+			case "Settings":
+				navigate(PATHS.SETTINGS)
+                return;
 			default:
 				return;
 		}
@@ -44,18 +78,18 @@ const SideBar = () => {
 
 	return (
 		<div className={`${isSidebarCollapsed ? "w-[5.3rem]" : "w-[285px]"} shadow-xl bg-white absolute  left-0 bottom-0 h-[calc(100vh_-_4.5rem)] z-[2] py-4`}>
-		<div className='flex w-full h-full flex-col items-start px-4'>
+		<div onMouseOver={() => setMouseHovering(true)} onMouseOut={() => setMouseHovering(false)} className='flex w-full h-full flex-col items-start px-4'>
 			<div className='flex-1 w-full'>
-				<button onClick={() => setSidebarCollapsed(!isSidebarCollapsed)} className=' absolute right-[-15px] shadow-2xl hover:bg-yellow-500/15 bg-white border-yellow-500 p-2 rounded-2xl'>
+				<button onClick={() => setSidebarCollapsed(!isSidebarCollapsed)} className={`absolute right-[-15px] ${!isMouseHovering && "hidden"} shadow-2xl hover:bg-yellow-500/15 bg-white border-yellow-500 p-2 rounded-2xl`}>
 					{isSidebarCollapsed ? <FaChevronRight color={APP_DESIGN_COLORS.MAIN_COLOR} /> : <FaChevronLeft color='rgb(234 179 8)' />}
 				</button>
 				<div onClick={handleSideBarOptionsInteractions} className=' flex flex-col h-full w-full gap-3 pt-[3rem]'>
 					{
-						buttons.map((_, index) => {
+						buttons?.map((btn, index) => {
 							return (
-								<button id={_} key={_} className={`h-10 w-full border-yellow-500 hover:bg-yellow-500/30 px-4 py-5  ${isSidebarCollapsed && "justify-center"} items-center rounded-lg flex flex-row gap-3 text-yellow-500`}>
+								<button title={btn.btnTitle} id={btn.btnTitle} key={btn.btnTitle} className={`h-10 w-full border-yellow-500 ${location.pathname.substring(1, location.pathname.length) === btn.btnPath && "bg-yellow-500/30"} hover:bg-yellow-500/30 px-4 py-5  ${isSidebarCollapsed && "justify-center"} items-center rounded-lg flex flex-row gap-3 text-yellow-500`}>
 									{getIcons(index)}
-									{ !isSidebarCollapsed ? <p>{_}</p> : null}
+									{ !isSidebarCollapsed ? <p>{btn.btnTitle}</p> : null}
 								</button>
 							)
 						})

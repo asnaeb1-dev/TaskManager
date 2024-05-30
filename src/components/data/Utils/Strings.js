@@ -3,7 +3,10 @@ export const APP_TITLE = "Tasker";
 export const PATHS = {
     LOGIN_PATH: "/login",
     DASHBOARD: "/dashboard",
-    LANDING_PAGE: "/"
+    LANDING_PAGE: "/",
+    TIMELINE: "/timeline",
+    FAVOURITES: "/favorites",
+    SETTINGS: "/settings",
 };
 
 export const APP_DESIGN_COLORS = {
@@ -13,6 +16,7 @@ export const APP_DESIGN_COLORS = {
 
 
 export const SELECT_NOTES_COLOR = "Select Note Color";
+export const EMPTY_NOTES = "No Tasks here";
 
 export const NOTES_COLOR = [
     "#e94452",
