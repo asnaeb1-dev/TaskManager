@@ -17,6 +17,14 @@ import "./animateToast.css";
  * type = 4 - note - pink
  */
 
+export const ToastTypes = {
+    INFO: 0,
+    SUCCESS: 1,
+    ERROR: 2,
+    WARNING: 3,
+    NOTE: 4
+}
+
 const ToastContainer = ({ type = 0, message = "Hello World", duration = 1000, onClose, showToast }) => {
     const [isHover, setHover] = useState(false);
 

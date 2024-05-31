@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { AddNotesContextInstance } from '../../../data/AppContext/AddNotesContext'
 
-import { APP_DESIGN_COLORS, NOTES_COLOR, TaskPriority } from '../../../data/Utils/Strings';
+import { APP_DESIGN_COLORS, NOTES_COLOR, TODO_TYPES, TaskPriority } from '../../../data/Utils/Strings';
 
 import { RxCross1 } from "react-icons/rx";
 
@@ -95,11 +95,11 @@ const AddTaskForm = ({ handleNoteSubmit }) => {
             <div role='notetitle' className='w-full flex flex-row border-b-2 focus:border-yellow-500 pb-2'>
                 <select defaultValue={"def"} className=' outline-none font-semibold rounded-lg p-2 bg-yellow-500/25 text-black'>
                     <option value={"def"} disabled selected hidden>Select Todo Type</option>
-                    <option value={"Task"}>Task</option>
-                    <option value={"Habit"}>Habit</option>
-                    <option value={"Chore"}>Chore</option>
-                    <option value={"Misc"}>Misc</option>
-                    <option value={"Reminder"}>Reminder</option>
+                    <option value={"Task"}>{TODO_TYPES.TASK}</option>
+                    <option value={"Habit"}>{TODO_TYPES.HABIT}</option>
+                    <option value={"Chore"}>{TODO_TYPES.CHORE}</option>
+                    <option value={"Misc"}>{TODO_TYPES.MISC}</option>
+                    <option value={"Reminder"}>{TODO_TYPES.REMINDER}</option>
                 </select>
                 <input
                     onChange={e => updateTaskData("title", e.target.value)}

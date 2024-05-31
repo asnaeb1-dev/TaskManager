@@ -1,8 +1,8 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import LoginComponent from '../../UIComponents/LoginComponent/LoginComponent';
 import SignupComponent from '../../UIComponents/SignupComponent/SignupComponent';
-import { authenticateUsingGoogle, createAccountWithEmailAndPassword, isUserLoggedIn, loginUserWithEmailAndPassword } from '../../../data/Services/Api';
-import ToastContainer from '../../UIComponents/ToastContainer/ToastContainer';
+import { authenticateUsingGoogle, createAccountWithEmailAndPassword, createDatabaseInstanceForUser, isUserLoggedIn, loginUserWithEmailAndPassword } from '../../../data/Services/Api';
+import ToastContainer, { ToastTypes } from '../../UIComponents/ToastContainer/ToastContainer';
 import { APP_TITLE, PATHS, ResponseType } from '../../../data/Utils/Strings';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
@@ -85,6 +85,7 @@ const LoginSignupScreen = () => {
 			if(data?.responseType === ResponseType.SUCCESS) {
 				if(data?.response?.user?.accessToken) {
 					navigate(PATHS.DASHBOARD, { replace: true })
+					setSignUpSuccess();
 				}
 			}
 		},
@@ -97,6 +98,32 @@ const LoginSignupScreen = () => {
 				duration: 1000
 			})
 		} 
+	})
+
+	const {
+		mutate: createDBInstanceForUser,
+		isError: userInstanceCreationHasError,
+		error: userInstanceCreationError
+	} = useMutation({
+		mutationFn: createDatabaseInstanceForUser,
+		onSuccess: (data) => {
+			console.log("db instance created", data);
+			setShowToast(true);
+			setToastProps({
+				type: ToastTypes.SUCCESS,
+				message: "Account creation Successful!",
+				duration: 1000
+			})
+		},
+		onError: (e) => {
+			console.log(e);
+			setShowToast(true);
+			setToastProps({
+				type: ToastTypes.ERROR,
+				message: "Account creation failed!",
+				duration: 1000
+			})
+		}
 	})
 
 	//GOOGLE Auth
@@ -124,7 +151,13 @@ const LoginSignupScreen = () => {
 	const handleUserCreateAccount = ({email, password, username, dob}) => {
 		createAccountMutation({
 			email,
-			password
+			password,
+		})
+		createDBInstanceForUser({
+			email,
+			password,
+			username,
+			dob
 		})
 	}
 
