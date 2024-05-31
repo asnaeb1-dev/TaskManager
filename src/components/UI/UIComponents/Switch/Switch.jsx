@@ -1,8 +1,8 @@
 import React from "react";
 import { APP_DESIGN_COLORS } from "../../../data/Utils/Strings";
 const SWITCH_WIDTH_PX = 45;
-const HANDLE_DIAMETER_PX = 20;
-const SWITCH_OFFSET_PX = 4;
+const HANDLE_DIAMETER_PX = 21;
+const SWITCH_OFFSET_PX = 2;
 const Switch = ({
  containerCheckedColor = APP_DESIGN_COLORS.MAIN_COLOR,
  containerUncheckedColor = "white",
@@ -15,7 +15,7 @@ const Switch = ({
    <div
      style={{
        width: SWITCH_WIDTH_PX,
-       height: HANDLE_DIAMETER_PX + 2 * SWITCH_OFFSET_PX,
+       height: HANDLE_DIAMETER_PX + 2.5 * SWITCH_OFFSET_PX,
        borderRadius: HANDLE_DIAMETER_PX,
        border: "1px #ddd solid",
        position: "relative",
