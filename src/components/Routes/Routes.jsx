@@ -24,9 +24,9 @@ const RouterRoutes = () => {
             <Routes>
                 <Route element={<PrivateRoutes />}>
                     <Route path={PATHS.DASHBOARD} exact element={<LayoutComponent><HomePageScreen/></LayoutComponent>} />
-                    <Route path={PATHS.TIMELINE} exact Component={<LayoutComponent><TimeLineScreen/></LayoutComponent>} />
-                    <Route path={PATHS.FAVOURITES} exact Component={<LayoutComponent><FavouritesScreen/></LayoutComponent>} />
-                    <Route path={PATHS.SETTINGS} exact Component={<LayoutComponent><SettingsScreen/></LayoutComponent>} />
+                    <Route path={PATHS.TIMELINE} exact element={<LayoutComponent><TimeLineScreen/></LayoutComponent>} />
+                    <Route path={PATHS.FAVOURITES} exact element={<LayoutComponent><FavouritesScreen/></LayoutComponent>} />
+                    <Route path={PATHS.SETTINGS} exact element={<LayoutComponent><SettingsScreen/></LayoutComponent>} />
                     {/* <Route path={PATHS.LANDING_PAGE} Component={Land} /> */}
                 </Route>
                 <Route path={PATHS.LOGIN_PATH} element={<LayoutComponent showSideBar={false} navbarType={0}><LoginSignupScreen /></LayoutComponent>} />

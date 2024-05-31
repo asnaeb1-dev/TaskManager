@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { APP_TITLE, PATHS } from '../../../data/Utils/Strings'
 import { MdDarkMode, MdLightMode } from "react-icons/md";
 import { FaSearch } from "react-icons/fa";
@@ -6,8 +6,17 @@ import { TaskerAppContext } from '../../../data/AppContext/AppContext';
 import { useLocation } from 'react-router-dom';
 
 const NavBar = ({ type = 0 }) => {
-    const [darkMode, setDarkMode] = useState(false);
-    return type === 0 ? <LoginNavBar darkMode={darkMode} handleDarkMode={() => setDarkMode(!darkMode)} /> : <DashBoardNavBar darkMode={darkMode} handleDarkMode={() => setDarkMode(!darkMode)} />
+    const {darkMode, setDarkMode} = useContext(TaskerAppContext);
+
+    useEffect(() => {
+        console.log(darkMode);
+    }, [darkMode])
+
+    return (
+        type === 0 ? 
+            <LoginNavBar darkMode={darkMode} handleDarkMode={() => setDarkMode(!darkMode)} />:
+            <DashBoardNavBar darkMode={darkMode} handleDarkMode={() => setDarkMode(!darkMode)} />
+    )
 }
 
 const LoginNavBar = ({ darkMode, handleDarkMode }) => {
@@ -20,7 +29,7 @@ const LoginNavBar = ({ darkMode, handleDarkMode }) => {
             </div>
             <div className='flex-1 flex items-center justify-end'>
                 <button className=' rounded-full p-1' onClick={() => handleDarkMode()}>
-                    {darkMode ? <MdLightMode /> : <MdDarkMode />}
+                    {!darkMode ? <MdLightMode /> : <MdDarkMode />}
                 </button>
             </div>
         </nav>
@@ -57,8 +66,8 @@ const DashBoardNavBar = ({ darkMode, handleDarkMode }) => {
                 </form>
             </div>
             <div className='flex items-center justify-end'>
-                <button className=' rounded-full p-2' onClick={() => handleDarkMode()}>
-                    {darkMode ? <MdLightMode size={25} /> : <MdDarkMode size={25} />}
+                <button className=' rounded-full p-2' onTouchEnd={() => handleDarkMode()} onClick={() => handleDarkMode()}>
+                    {!darkMode ? <MdLightMode size={25} /> : <MdDarkMode size={25} />}
                 </button>
             </div>
         </nav>

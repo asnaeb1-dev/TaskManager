@@ -17,6 +17,13 @@ export const APP_DESIGN_COLORS = {
 
 export const SELECT_NOTES_COLOR = "Select Note Color";
 export const EMPTY_NOTES = "No Tasks here";
+export const TODO_TYPES =  {
+    TASK: "Task",
+    HABIT: "Habit",
+    CHORE: "Chore",
+    MISC: "Misc",
+    REMINDER: "Reminder"
+}
 
 export const NOTES_COLOR = [
     "#e94452",
@@ -50,4 +57,10 @@ export const TaskPriority = {
     MEDIUM: "medium",
     LOW: "low",
     HIGH: "high"
+}
+
+export const DB_INSTANCES = {
+    USERS_INSTANCE : "users",
+    TASKS_INSTANCE : "tasks",
+    NOTES_INSTANCE : "notes"
 }
