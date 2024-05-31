@@ -52,7 +52,7 @@ export const createAccountWithEmailAndPassword = async({email = "", password = "
         const responseObject = new Response(ResponseType.SUCCESS, response);
         return responseObject;
     } catch(e) {
-        const responseObject = new Response(ResponseType.SUCCESS, e);
+        const responseObject = new Response(ResponseType.ERROR, e);
         return responseObject;
 
     }
