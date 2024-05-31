@@ -18,13 +18,6 @@ const LoginSignupScreen = () => {
 
 	const [loginStatus] = useState(isUserLoggedIn);
 
-	const [userCredentialsForCreateAccount, setUserCredentialsForCreateAccount] = useState({
-		emailAddress: "",
-		password: "",
-		username: "",
-		dob: ""
-	});
-
 	const [currentPage, setCurrentPage] = useState("login"); //createaccount | login
 	const [showToast, setShowToast] = useState(false);
 	const [isLoading, setLoading] = useState(false);
