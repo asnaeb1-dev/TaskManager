@@ -1,13 +1,15 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth"
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "firebase/auth"
 import { addDoc, collection, getFirestore } from "firebase/firestore";
 import { firebaseConfig } from "./firebaseConfig";
 import { DB_INSTANCES, ResponseType, TODO_TYPES } from "../Utils/Strings";
 import Response from "../Utils/Response";
+
 const app = initializeApp(firebaseConfig);
 
 const auth = getAuth();
 const database = getFirestore(app);
+
 
 export const loginUserWithEmailAndPassword = async ({email = "", password =""}) => {
     try {
@@ -18,7 +20,7 @@ export const loginUserWithEmailAndPassword = async ({email = "", password =""}) 
     }
 }
 
-export const createDatabaseInstanceForUser = async ({ email = "", username = "", dob = "", phoneNumber = 0 }) => {
+export const createDatabaseInstanceForUser = async (email = "", username = "", dob = "", phoneNumber = 0) => {
     const userObject = {
         username,
         email,
@@ -46,10 +48,11 @@ export const createDatabaseInstanceForUser = async ({ email = "", username = "",
     }
 }
 
-export const createAccountWithEmailAndPassword = async({email = "", password = ""}) => {
+export const createAccountWithEmailAndPassword = async({email = "", password = "", username = "", dob = ""}) => {
     try {
         const response = await createUserWithEmailAndPassword(auth, email, password);
-        const responseObject = new Response(ResponseType.SUCCESS, response);
+        const dbInstanceResponse = await createDatabaseInstanceForUser(email, username, dob);
+        const responseObject = new Response(ResponseType.SUCCESS, { response, dbInstanceResponse});
         return responseObject;
     } catch(e) {
         const responseObject = new Response(ResponseType.ERROR, e);
@@ -59,9 +62,9 @@ export const createAccountWithEmailAndPassword = async({email = "", password = "
 }
 
 export const isUserLoggedIn = () => {
-    const user = auth.currentUser;
-    console.log("current-", user);
-    return user;
+    onAuthStateChanged(auth, user => {
+        cb(user);
+    })
 }
 
 export const authenticateUsingGoogle = async () => {

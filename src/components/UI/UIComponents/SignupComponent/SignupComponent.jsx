@@ -25,25 +25,25 @@ const SignupComponent = ({ submitUserCredentialsToCreateAccount, swapLoginSignup
                         <span>
                             <FaUser size={15} color='rgb(234 179 8)' />
                         </span>
-                        <input name="username" className=' text-yellow-500 outline-none px-2 w-full' placeholder='Username' type={"text"} />
+                        <input name="username" value={"abhigyanraha"} className=' text-yellow-500 outline-none px-2 w-full' placeholder='Username' type={"text"} />
                     </div>
                     <div className='flex flex-row bg-white w-full border-2 rounded-lg p-3 outline-yellow-500 items-center'>
                         <span>
                             <MdEmail size={19} color='rgb(234 179 8)' />
                         </span>
-                        <input name="email" className='w-full px-2 text-yellow-500 outline-none' placeholder='Email' type={"email"} />
+                        <input name="email" value={"abhi222@raha.com"} className='w-full px-2 text-yellow-500 outline-none' placeholder='Email' type={"email"} />
                     </div>
                     <div className='flex flex-row w-full bg-white border-2 rounded-lg p-3 outline-yellow-500 items-center'>
                         <span>
                             <FaLock size={15} color='rgb(234 179 8)' />
                         </span>
-                        <input name="password" className='w-full px-2 outline-none text-yellow-500' placeholder='Password' type={"password"} />
+                        <input name="password" value={"abhigyanraha"} className='w-full px-2 outline-none text-yellow-500' placeholder='Password' type={"password"} />
                     </div>
                     <div className='flex flex-row w-full bg-white border-2 rounded-lg p-3 outline-yellow-500 items-center'>
                         <span>
                             <FaLock size={15} color='rgb(234 179 8)' />
                         </span>
-                        <input name="cnfpassword" className='w-full px-2 outline-none text-yellow-500' placeholder='Confirm Password' type={"password"} />
+                        <input name="cnfpassword" value={"abhigyanraha"} className='w-full px-2 outline-none text-yellow-500' placeholder='Confirm Password' type={"password"} />
                     </div>
                     <div className='flex flex-row w-full bg-white border-2 rounded-lg p-3 outline-yellow-500 items-center'>
                         <span>

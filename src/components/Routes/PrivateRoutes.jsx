@@ -1,7 +1,6 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Outlet, Navigate } from "react-router-dom";
 import { PATHS } from '../data/Utils/Strings';
-import { isUserLoggedIn } from '../data/Services/Api';
 
 const PrivateRoutes = () => {
     const isAuthenticated = true;

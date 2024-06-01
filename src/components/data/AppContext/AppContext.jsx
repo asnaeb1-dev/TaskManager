@@ -7,10 +7,11 @@ const AppContext = ({ children }) => {
     const [appState, setAppState] = useState();
     const [currentPage, setCurrentPage] = useState();
     const [darkMode, setDarkMode] = useState(true);
+
     const contextState = {
         appState, setAppState,
         currentPage, setCurrentPage,
-        darkMode, setDarkMode
+        darkMode, setDarkMode,
     }
     return (
         <TaskerAppContext.Provider value={contextState}>

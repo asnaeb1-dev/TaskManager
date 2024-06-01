@@ -8,6 +8,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 
 import BackImage from "../../../../assets/back.svg";
+import { TaskerAppContext } from '../../../data/AppContext/AppContext';
 
 const LoginSignupScreen = () => {
 	const navigate = useNavigate();
@@ -15,6 +16,13 @@ const LoginSignupScreen = () => {
 		emailAddress: "",
 		password: ""
 	});
+
+	const [userCredentialsForSignUp, setUserCredentialsForSignUp] = useState({
+		email: "",
+        password: "",
+        username: "",
+        dob: ""
+	})
 
 	const [loginStatus] = useState(isUserLoggedIn);
 
@@ -27,11 +35,10 @@ const LoginSignupScreen = () => {
         duration: 1000,
 	})
 
+	//check if user is logged in
 	useLayoutEffect(() => {
-		if(loginStatus) {
-			navigate(PATHS.DASHBOARD, { replace: true })
-		}
-	}, [loginStatus])
+		
+	}, [])
 
 
 	useEffect(() => {
@@ -59,65 +66,58 @@ const LoginSignupScreen = () => {
 		})()
 	}, [userCredentialsForLogin])
 
+
+	useEffect(() => {
+		const { username, email, password, dob } = userCredentialsForSignUp;
+		if(!username || !email || !password || !dob) return;
+		createAccountMutation({
+			email,
+			password,
+		})
+	}, [userCredentialsForSignUp])
+
+
 	//create account 
 	const { 
 		mutate: createAccountMutation,
 		isError: createAccountHasError,
 		error: createAccountError,
-		isPending: createAccountPending
+		isPending: createAccountPending,
+		
 	} = useMutation({
 		mutationFn: createAccountWithEmailAndPassword,
 		onSuccess: (data) => {
 			console.log("create account success", data)
-			setShowToast(true);
-			setToastProps({
-				type: 1,
-				message: "Account creation successful!",
-				duration: 1000
-			})
 			if(data?.responseType === ResponseType.SUCCESS) {
-				if(data?.response?.user?.accessToken) {
-					navigate(PATHS.DASHBOARD, { replace: true })
-					setSignUpSuccess();
+				if(data?.response?.response?.user?.accessToken) {
+					setShowToast(true)
+					setToastProps({
+						type: ToastTypes.SUCCESS,
+						message: "Account creation Successfull!",
+						duration: 3000
+					});
+					setTimeout(() => {
+						navigate(PATHS.DASHBOARD, { replace: true })
+					}, 2000)
+					return;
 				}
-			}
-		},
-		onError: (e) => {
-			console.log(e);
-			setShowToast(true);
-			setToastProps({
-				type: 1,
-				message: "Account creation failed!",
-				duration: 1000
-			})
-		} 
-	})
-
-	const {
-		mutate: createDBInstanceForUser,
-		isError: userInstanceCreationHasError,
-		error: userInstanceCreationError
-	} = useMutation({
-		mutationFn: createDatabaseInstanceForUser,
-		onSuccess: (data) => {
-			console.log("db instance created", data);
-			setShowToast(true);
-			setToastProps({
-				type: ToastTypes.SUCCESS,
-				message: "Account creation Successful!",
-				duration: 1000
-			})
-		},
-		onError: (e) => {
-			console.log(e);
+			} 
 			setShowToast(true);
 			setToastProps({
 				type: ToastTypes.ERROR,
-				message: "Account creation failed!",
+				message: "Account creation Failed!",
 				duration: 1000
-			})
+			});
 		}
 	})
+
+	useEffect(() => {
+		if(showToast) {
+			setTimeout(() => {
+				setShowToast(false)
+			}, 3000)
+		}
+	}, [showToast])
 
 	//GOOGLE Auth
 	const { mutate: googleAuthMutation, isPending: googleLoginPending } = useMutation({
@@ -143,10 +143,6 @@ const LoginSignupScreen = () => {
 
 	const handleUserCreateAccount = ({email, password, username, dob}) => {
 		createAccountMutation({
-			email,
-			password,
-		})
-		createDBInstanceForUser({
 			email,
 			password,
 			username,

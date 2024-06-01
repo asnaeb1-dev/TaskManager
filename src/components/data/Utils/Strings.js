@@ -45,7 +45,7 @@ export const  ResponseType = {
     SUCCESS: "success",
     ERROR: "error",
     INFO: "info",
-    LOADING: "loading"
+    LOADING: "loading",
 }
 
 export const LOGIN_OBJECT = {
