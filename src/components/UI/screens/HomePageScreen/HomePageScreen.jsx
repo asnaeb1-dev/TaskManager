@@ -10,6 +10,7 @@ const HomePageScreen = () => {
 	const navigate = useNavigate();
 	useEffect(() => {
 		isUserLoggedIn(user => {
+			console.log("user", user);
 			if(!user) {
 				navigate(PATHS.LOGIN_PATH, { replace: true });
 			}

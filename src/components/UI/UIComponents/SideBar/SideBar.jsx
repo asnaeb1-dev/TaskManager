@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState, useRef } from 'react'
 import { FaClipboardList, FaCalendarTimes, FaCog, FaChevronRight, FaChevronLeft } from "react-icons/fa";
 import { MdFavorite } from "react-icons/md";
 import { IoMdAdd } from "react-icons/io";
@@ -9,8 +9,12 @@ import { AddNotesContextInstance } from '../../../data/AppContext/AddNotesContex
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import { logoutUser } from '../../../data/Services/Api';
+
+import "./sidebar.css";
+
 const SideBar = () => {
 	const navigate = useNavigate();
+	const sidebarRef = useRef();
 	const location = useLocation();
 	const [isSidebarCollapsed, setSidebarCollapsed] = useState(true);
 	const [isMouseHovering, setMouseHovering] = useState(false);
@@ -95,11 +99,18 @@ const SideBar = () => {
 
 	const handleLogout = () => {
 		logoutMutation();
-
 	}
 
+	useEffect(() => {
+		if(isSidebarCollapsed) {
+			sidebarRef.current.classList.add("animateSlideInSidebar")
+		} else {
+			sidebarRef.current.classList.add("animateSlideOut");
+		}
+	}, [isSidebarCollapsed])
+
 	return (
-		<div className={`${isSidebarCollapsed ? "w-[5.3rem]" : "w-[285px]"} shadow-xl bg-white absolute  left-0 bottom-0 h-[calc(100vh_-_4.5rem)] z-[2] py-4`}>
+		<div ref={sidebarRef} className={`${isSidebarCollapsed ? "w-[5.3rem]" : "w-[285px]"} shadow-xl bg-white absolute  left-0 bottom-0 h-[calc(100vh_-_4.5rem)] z-[2] py-4`}>
 		<div onMouseOver={() => setMouseHovering(true)} onMouseOut={() => setMouseHovering(false)} className='flex w-full h-full flex-col items-start px-4'>
 			<div className='flex-1 w-full'>
 				<button onClick={() => setSidebarCollapsed(!isSidebarCollapsed)} className={`absolute right-[-15px] ${!isMouseHovering && "hidden"} shadow-2xl hover:bg-yellow-500/15 bg-white border-yellow-500 p-2 rounded-2xl`}>
