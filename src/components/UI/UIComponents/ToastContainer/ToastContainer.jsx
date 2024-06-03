@@ -25,9 +25,8 @@ export const ToastTypes = {
     NOTE: 4
 };
 
-const ToastContainer = ({ type = ToastTypes.INFO, message = "Hello World", duration = 1000, onClose, showToast = false }) => {
+const ToastContainer = ({ type = -1, message = "", duration = 1000, onClose, showToast = false }) => {
     const [isHover, setHover] = useState(false);
-
     const getIcon = type => {
         switch (type) {
             case ToastTypes.INFO:

@@ -7,6 +7,8 @@ import { APP_DESIGN_COLORS, PATHS } from '../../../data/Utils/Strings';
 import { TaskerAppContext } from '../../../data/AppContext/AppContext';
 import { AddNotesContextInstance } from '../../../data/AppContext/AddNotesContext';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useMutation } from '@tanstack/react-query';
+import { logoutUser } from '../../../data/Services/Api';
 const SideBar = () => {
 	const navigate = useNavigate();
 	const location = useLocation();
@@ -76,6 +78,26 @@ const SideBar = () => {
 
 	}
 
+	const {
+		mutate: logoutMutation,
+		isError: logoutHasUser,
+		error: logoutError,
+		isPending: logoutIsPending
+	} = useMutation({
+		mutationFn: logoutUser,
+		onSuccess: (responseData) => {
+			console.log("responseData: ", responseData);
+		},
+		onError: (err) => {
+            console.log(err);
+        }
+	})
+
+	const handleLogout = () => {
+		logoutMutation();
+
+	}
+
 	return (
 		<div className={`${isSidebarCollapsed ? "w-[5.3rem]" : "w-[285px]"} shadow-xl bg-white absolute  left-0 bottom-0 h-[calc(100vh_-_4.5rem)] z-[2] py-4`}>
 		<div onMouseOver={() => setMouseHovering(true)} onMouseOut={() => setMouseHovering(false)} className='flex w-full h-full flex-col items-start px-4'>
@@ -99,7 +121,7 @@ const SideBar = () => {
 			<div className='flex-1 flex flex-col w-full gap-2'>
 			</div>
 			<div className='flex-1 flex flex-col justify-end items-start w-full'>
-				<div className='flex flex-row items-center gap-1 hover:bg-yellow-500/10 border-yellow-500 w-full rounded-lg'>
+				<div onClick={handleLogout} className='flex flex-row items-center gap-1 hover:bg-yellow-500/10 border-yellow-500 w-full rounded-lg'>
 					<img
 						className=' object-contain w-12 h-12 shadow-2xl rounded-full'
 						src='https://static.vecteezy.com/system/resources/previews/018/765/757/original/user-profile-icon-in-flat-style-member-avatar-illustration-on-isolated-background-human-permission-sign-business-concept-vector.jpg'

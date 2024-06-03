@@ -44,7 +44,7 @@ const TagPicker = ({ updateTagList }) => {
                     {
                         tags?.map((tag, index) => {
                             return (
-                                <span className='bg-yellow-500/50 flex items-center flex-row px-2 py-1 gap-1 text-black rounded-md'>
+                                <span key={tag} className='bg-yellow-500/50 flex items-center flex-row px-2 py-1 gap-1 text-black rounded-md'>
                                     <p className=' whitespace-nowrap text-ellipsis overflow-hidden'>{tag}</p>
                                     <span onClick={() => handleTagRemove(index)} className='pt-1 cursor-pointer'>
                                         <MdCancel color='white'/>

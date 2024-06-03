@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import PrivateRoutes from "./PrivateRoutes";
 //Pages
 import HomePageScreen from "../UI/screens/HomePageScreen/HomePageScreen";
@@ -12,15 +12,11 @@ import FavouritesScreen from '../UI/screens/FavouritesScreen/FavouritesScreen';
 import SettingsScreen from '../UI/screens/SettingsScreen/SettingsScreen';
 import SideBar from '../UI/UIComponents/SideBar/SideBar';
 import AddNotes from '../UI/UIComponents/AddNotes/AddNotes';
-import { useEffect } from 'react';
 
 const RouterRoutes = () => {
     
     return (
         <BrowserRouter>
-            
-            {/* <SideBar />
-            <AddNotes /> */}
             <Routes>
                 <Route element={<PrivateRoutes />}>
                     <Route path={PATHS.DASHBOARD} exact element={<LayoutComponent><HomePageScreen/></LayoutComponent>} />

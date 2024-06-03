@@ -14,7 +14,14 @@ export const APP_DESIGN_COLORS = {
     MAIN_COLOR_BGX: "rgba(234, 179, 8, .4)"
 }
 
-
+// Strings in the app
+export const ACCOUNT_CREATION_FAILED = "Account creation failed!";
+export const ACCOUNT_CREATION_SUCCESS = "Account created successfully!";
+export const LOGIN_FAILED = "Login failed!";
+export const LOGIN_SUCCESS = "Login successful!";
+export const LOGOUT_FAILED = "Logout failed!";
+export const LOGOUT_SUCCESS = "Logout successful!";
+export const GOOGLE_LOGIN_SUCCESS = "Google login succeeded!";
 export const SELECT_NOTES_COLOR = "Select Note Color";
 export const EMPTY_NOTES = "No Tasks here";
 export const TODO_TYPES =  {

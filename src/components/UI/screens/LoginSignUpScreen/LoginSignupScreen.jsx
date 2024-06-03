@@ -1,81 +1,61 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import LoginComponent from '../../UIComponents/LoginComponent/LoginComponent';
 import SignupComponent from '../../UIComponents/SignupComponent/SignupComponent';
-import { authenticateUsingGoogle, createAccountWithEmailAndPassword, createDatabaseInstanceForUser, isUserLoggedIn, loginUserWithEmailAndPassword } from '../../../data/Services/Api';
+import { authenticateUsingGoogle, createAccountWithEmailAndPassword, isUserLoggedIn, loginUserWithEmailAndPassword } from '../../../data/Services/Api';
 import ToastContainer, { ToastTypes } from '../../UIComponents/ToastContainer/ToastContainer';
-import { APP_TITLE, PATHS, ResponseType } from '../../../data/Utils/Strings';
+import { ACCOUNT_CREATION_FAILED, ACCOUNT_CREATION_SUCCESS, APP_TITLE, GOOGLE_LOGIN_SUCCESS, LOGIN_FAILED, LOGIN_SUCCESS, PATHS, ResponseType } from '../../../data/Utils/Strings';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 
 import BackImage from "../../../../assets/back.svg";
-import { TaskerAppContext } from '../../../data/AppContext/AppContext';
 
 const LoginSignupScreen = () => {
 	const navigate = useNavigate();
-	const [userCredentialsForLogin, setUserCredentialsForLogin] = useState({
-		emailAddress: "",
-		password: ""
-	});
-
-	const [userCredentialsForSignUp, setUserCredentialsForSignUp] = useState({
-		email: "",
-        password: "",
-        username: "",
-        dob: ""
-	})
-
-	const [loginStatus] = useState(isUserLoggedIn);
 
 	const [currentPage, setCurrentPage] = useState("login"); //createaccount | login
 	const [showToast, setShowToast] = useState(false);
-	const [isLoading, setLoading] = useState(false);
-	const [toastProps, setToastProps] = useState({
-		type: 0,
-        message: "Hello World",
-        duration: 1000,
-	})
+	const [toastProps, setToastProps] = useState({})
 
 	//check if user is logged in
 	useLayoutEffect(() => {
-		
+		isUserLoggedIn(user => {
+			if(user) {
+				navigate(PATHS.DASHBOARD, {replace: true});
+			}
+		})
 	}, [])
 
-
-	useEffect(() => {
-		if(!userCredentialsForLogin.emailAddress || !userCredentialsForLogin.password) return;
-		setLoading(true);
-		(async () => {
-			const loginResponse = await loginUserWithEmailAndPassword(userCredentialsForLogin.emailAddress, userCredentialsForLogin.password);
-			// console.log(loginResponse);
-			setShowToast(true);
-			if(loginResponse.responseType === ResponseType.SUCCESS) {
-				setToastProps({
-					type: 1,
-                    message: "Login Success",
-                    duration: 1000
-				})
-			} else {
-				setToastProps({
-					type: 2,
-                    message: "Sorry! Login failed",
-                    duration: 1000
-				})
-			}
-			setLoading(false)
-			setUserCredentialsForLogin(LOGIN_OBJECT);
-		})()
-	}, [userCredentialsForLogin])
-
-
-	useEffect(() => {
-		const { username, email, password, dob } = userCredentialsForSignUp;
-		if(!username || !email || !password || !dob) return;
-		createAccountMutation({
-			email,
-			password,
-		})
-	}, [userCredentialsForSignUp])
-
+	const {
+		mutate: loginUserMutation,
+		isError: loginUserHasError,
+		error: loginUserError,
+        isPending: loginUserIsPending
+	} = useMutation({
+		mutationFn: loginUserWithEmailAndPassword,
+        onSuccess: (data) => {
+            console.log("login success", data)
+            if(data?.responseType === ResponseType.SUCCESS) {
+                if(data?.response?.user?.accessToken) {
+                    setShowToast(true)
+                    setToastProps({
+                        type: ToastTypes.SUCCESS,
+                        message: LOGIN_SUCCESS,
+                        duration: 3000
+                    });
+                    setTimeout(() => {
+                        navigate(PATHS.DASHBOARD, { replace: true })
+                    }, 2000)
+                    return;
+                }
+            } 
+            setShowToast(true);
+            setToastProps({
+                type: ToastTypes.ERROR,
+                message: LOGIN_FAILED,
+                duration: 3000
+            });
+        },
+	})
 
 	//create account 
 	const { 
@@ -93,11 +73,11 @@ const LoginSignupScreen = () => {
 					setShowToast(true)
 					setToastProps({
 						type: ToastTypes.SUCCESS,
-						message: "Account creation Successfull!",
+						message: ACCOUNT_CREATION_SUCCESS,
 						duration: 3000
 					});
 					setTimeout(() => {
-						navigate(PATHS.DASHBOARD, { replace: true })
+						// navigate(PATHS.DASHBOARD, { replace: true })
 					}, 2000)
 					return;
 				}
@@ -105,19 +85,11 @@ const LoginSignupScreen = () => {
 			setShowToast(true);
 			setToastProps({
 				type: ToastTypes.ERROR,
-				message: "Account creation Failed!",
+				message: ACCOUNT_CREATION_FAILED,
 				duration: 1000
 			});
 		}
 	})
-
-	useEffect(() => {
-		if(showToast) {
-			setTimeout(() => {
-				setShowToast(false)
-			}, 3000)
-		}
-	}, [showToast])
 
 	//GOOGLE Auth
 	const { mutate: googleAuthMutation, isPending: googleLoginPending } = useMutation({
@@ -127,7 +99,7 @@ const LoginSignupScreen = () => {
 			setShowToast(true);
 			setToastProps({
 				type: 1,
-				message: "Google Login successful!",
+				message: GOOGLE_LOGIN_SUCCESS,
 				duration: 1000
 			})
 			if(data?.responseType === ResponseType.SUCCESS) {
@@ -150,6 +122,11 @@ const LoginSignupScreen = () => {
 		})
 	}
 
+	const handleUserLogin = (email, password) => {
+		if(!email || !password) return; 
+		loginUserMutation({email, password})
+	}
+
 	return (
 		<div style={{ backgroundImage: `url(${BackImage})` }} className='w-full h-full md:bg-white bg-no-repeat bg-bottom bg-blend-overlay bg-white/70'>
 			<div className='w-full h-full md:flex md:flex-row md:justify-center flex-auto'>
@@ -157,10 +134,10 @@ const LoginSignupScreen = () => {
 				{
 					currentPage === "login" ?
 					<LoginComponent
-						isLoading={googleLoginPending}
+						isLoading={googleLoginPending || loginUserIsPending}
 						handleGoogleLogin={() => googleAuthMutation()}
 						swapLoginSignup={current => setCurrentPage(current)}
-						submitUserCredentialsForLogin={(email, password) => setUserCredentialsForLogin({ emailAddress: email, password })}
+						submitUserCredentialsForLogin={(email, password) => handleUserLogin(email, password)}
 					/>
 					:
 					<SignupComponent
@@ -183,7 +160,7 @@ const LoginSignupScreen = () => {
 				message={toastProps.message}
 				type={toastProps.type}
 				duration={3000}
-				onClose={() => setShowToast(true)} 
+				onClose={() => setShowToast(false)} 
 			/>
 		</div>
 	)
