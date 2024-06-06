@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { AddNotesContextInstance } from '../../../data/AppContext/AddNotesContext'
 
-import { APP_DESIGN_COLORS, NOTES_COLOR, TODO_TYPES, TaskPriority } from '../../../data/Utils/Strings';
+import { ADD_NOTE, APP_DESIGN_COLORS, NOTES_COLOR, TODO_TYPE, TODO_TYPES, TaskPriority } from '../../../data/Utils/Strings';
 
 import { RxCross1 } from "react-icons/rx";
 
@@ -13,6 +13,7 @@ import DurationPicker from './AddNotesComponents/DurationPicker/DurationPicker';
 import TaskStateSelector from './AddNotesComponents/TaskStateSelector/TaskStateSelector';
 import PrivacySelector from './AddNotesComponents/PrivacySelector/PrivacySelector';
 import TagPicker from './AddNotesComponents/TagPicker/TagPicker';
+import ProgressPicker from './AddNotesComponents/ProgressPicker/ProgressPicker';
 
 const AddNotes = () => {
     const { isAddNotesOpen, setAddNotesOpen } = useContext(AddNotesContextInstance)
@@ -94,7 +95,7 @@ const AddTaskForm = ({ handleNoteSubmit }) => {
         <div onSubmit={handleNoteSubmit} className='h-full flex flex-col gap-7 my-6 text-sm overflow-y-auto'>
             <div role='notetitle' className='w-full flex flex-row border-b-2 focus:border-yellow-500 pb-2'>
                 <select defaultValue={"def"} className=' outline-none font-semibold rounded-lg p-2 bg-yellow-500/25 text-black'>
-                    <option value={"def"} disabled selected hidden>Select Todo Type</option>
+                    <option value={"def"} disabled selected hidden>{TODO_TYPE}</option>
                     <option value={"Task"}>{TODO_TYPES.TASK}</option>
                     <option value={"Habit"}>{TODO_TYPES.HABIT}</option>
                     <option value={"Chore"}>{TODO_TYPES.CHORE}</option>
@@ -114,6 +115,7 @@ const AddTaskForm = ({ handleNoteSubmit }) => {
                 value={taskData.isTaskPrivate}
                 setValue={val => updateTaskData("privacy", val)}
             />
+            <ProgressPicker />
             <PrioritySelector
                 taskPriority={taskData.taskPriority}
                 setTaskPriority={priority => updateTaskData("priority", priority)}
@@ -131,7 +133,7 @@ const AddTaskForm = ({ handleNoteSubmit }) => {
             <TaskStateSelector />
             <div className='flex absolute items-center bg-white h-14 bottom-0'>
                 <button className=' bg-yellow-500/50 px-5 py-2 rounded-lg font-semibold  hover:scale-105'>
-                    Add Note
+                    {ADD_NOTE}
                 </button>
             </div>
         </div>

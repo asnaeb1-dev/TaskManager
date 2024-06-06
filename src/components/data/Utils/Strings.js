@@ -24,6 +24,8 @@ export const LOGOUT_SUCCESS = "Logout successful!";
 export const GOOGLE_LOGIN_SUCCESS = "Google login succeeded!";
 export const SELECT_NOTES_COLOR = "Select Note Color";
 export const EMPTY_NOTES = "No Tasks here";
+export const ADD_NOTE = "Add Note";
+export const TODO_TYPE = "Todo Type";
 export const TODO_TYPES =  {
     TASK: "Task",
     HABIT: "Habit",
