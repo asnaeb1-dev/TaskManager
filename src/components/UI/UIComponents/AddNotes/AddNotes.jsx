@@ -54,7 +54,8 @@ const AddTaskForm = ({ handleNoteSubmit }) => {
         taskTags: [],
         taskStartTime: "",
         taskEndTime: "",
-        taskDescription: ""
+        taskDescription: "",
+        taskProgress: {}
     })
 
     useEffect(() => {
@@ -83,6 +84,10 @@ const AddTaskForm = ({ handleNoteSubmit }) => {
 
                 case "priority":
                     tempTaskInfo.taskPriority = info;
+                    return tempTaskInfo;
+
+                case "progress":
+                    tempTaskInfo.taskProgress = info;
                     return tempTaskInfo;
                 
                 default:
@@ -115,7 +120,10 @@ const AddTaskForm = ({ handleNoteSubmit }) => {
                 value={taskData.isTaskPrivate}
                 setValue={val => updateTaskData("privacy", val)}
             />
-            <ProgressPicker />
+            <ProgressPicker
+                currentProgress={0}
+                setCurrentProgress={(progress) => updateTaskData("progress", progress)}
+            />
             <PrioritySelector
                 taskPriority={taskData.taskPriority}
                 setTaskPriority={priority => updateTaskData("priority", priority)}

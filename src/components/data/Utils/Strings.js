@@ -26,6 +26,7 @@ export const SELECT_NOTES_COLOR = "Select Note Color";
 export const EMPTY_NOTES = "No Tasks here";
 export const ADD_NOTE = "Add Note";
 export const TODO_TYPE = "Todo Type";
+export const PROGRESS_TASK = "Task Progress";
 export const TODO_TYPES =  {
     TASK: "Task",
     HABIT: "Habit",
@@ -66,6 +67,12 @@ export const TaskPriority = {
     MEDIUM: "medium",
     LOW: "low",
     HIGH: "high"
+}
+
+export const TaskProgressState = {
+    NOT_STARTED: 0,
+    IN_PROGRESS: 1,
+    COMPLETED: 2,
 }
 
 export const DB_INSTANCES = {
