@@ -68,7 +68,7 @@ const ToastContainer = ({ type = -1, message = "", duration = 1000, onClose, sho
 
     useEffect(() => {
         setTimeout(() => {
-            onClose();
+            // onClose();
         }, duration = 1000)
     }, [duration])
 

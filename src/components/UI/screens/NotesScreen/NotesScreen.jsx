@@ -137,6 +137,8 @@ const NotesScreen = () => {
             isMovableToNextDate: false,
         }
     ]);
+
+
     return (
         <div className='w-[calc(100vw_-_5.3rem)] h-[calc(100vh_-_4rem)] overflow-y-scroll absolute z-[0] right-0 px-4 py-2'>
             <div className='w-full h-20 sticky top-0 bg-white rounded-xl shadow-md'>

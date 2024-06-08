@@ -12,6 +12,7 @@ import FavouritesScreen from '../UI/screens/FavouritesScreen/FavouritesScreen';
 import SettingsScreen from '../UI/screens/SettingsScreen/SettingsScreen';
 import SideBar from '../UI/UIComponents/SideBar/SideBar';
 import AddNotes from '../UI/UIComponents/AddNotes/AddNotes';
+import UserProfile from '../UI/UIComponents/UserProfile/UserProfile';
 
 const RouterRoutes = () => {
     
@@ -40,6 +41,7 @@ const LayoutComponent = ({ children, showSideBar = true, navbarType = 1 }) => {
                 <SideBar />
             }
             <AddNotes />
+            <UserProfile />
             {children}
         </>
     )

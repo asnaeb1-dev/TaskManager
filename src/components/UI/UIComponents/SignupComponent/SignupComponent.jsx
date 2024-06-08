@@ -69,7 +69,7 @@ const SignupComponent = ({ submitUserCredentialsToCreateAccount, swapLoginSignup
                 </form>
                 <div className='flex flex-row text-sm justify-center mt-5 gap-1'>
                     <h1>Already have an account?</h1>
-                    <h1 onClick={() => swapLoginSignup("login")} className='font-bold text-yellow-500 hover:underline '>Login</h1>
+                    <h1 onClick={() => swapLoginSignup("login")} className='font-bold text-yellow-500 hover:underline cursor-pointer'>Login</h1>
                 </div>
             </div>
         </div>

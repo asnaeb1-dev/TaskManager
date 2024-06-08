@@ -67,7 +67,7 @@ const LoginComponent = ({ submitUserCredentialsForLogin, swapLoginSignup, isLoad
                 </form>
                 <div className='flex flex-row text-sm justify-center mt-5 gap-1'>
                     <h1>Don't have an account?</h1>
-                    <button disabled={isLoading} onClick={() => swapLoginSignup("createaccount")} className='font-bold text-yellow-500 hover:underline '>Sign up</button>
+                    <button disabled={isLoading} onClick={() => swapLoginSignup("createaccount")} className='font-bold text-yellow-500 hover:underline cursor-pointer '>Sign up</button>
                 </div>
             </div>
         </div>

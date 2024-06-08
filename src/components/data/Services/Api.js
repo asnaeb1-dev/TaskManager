@@ -1,10 +1,11 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut, updateProfile } from "firebase/auth"
-import { addDoc, collection, getFirestore } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, getFirestore, setDoc } from "firebase/firestore";
 import { firebaseConfig } from "./firebaseConfig";
 import { DB_INSTANCES, ResponseType, TODO_TYPES } from "../Utils/Strings";
 import Response from "../Utils/Response";
 import firebase from "firebase/compat/app";
+import { get } from "firebase/database";
 
 const app = initializeApp(firebaseConfig);
 
@@ -21,9 +22,20 @@ export const loginUserWithEmailAndPassword = async ({email = "", password =""}) 
     }
 }
 
-// export const updateDisplayNameForUser = async (username = "", signUpResponse) => {
-//     const updationResponse = await signUpResponse.
-// }
+export const getUserDetailsFromDB = async (username = "") => {
+    try {
+        const docSnapshotResponse = await getDoc(doc(database, DB_INSTANCES.USERS_INSTANCE, username));
+        if(docSnapshotResponse.exists()) {
+            const responseData = await docSnapshotResponse.data()
+            return new Response(ResponseType.SUCCESS, responseData);
+        } else {
+            return new Response(ResponseType.INFO, { details: "User details unavailable" });
+        }
+    } catch (e) {
+        return new Response(ResponseType.ERROR, e);
+    }
+}
+
 
 export const createDatabaseInstanceForUser = async (email = "", username = "", dob = "", phoneNumber = 0) => {
     const userObject = {
@@ -46,7 +58,7 @@ export const createDatabaseInstanceForUser = async (email = "", username = "", d
         }
     }
     try {
-        const responseDocRef = await addDoc(collection(database, DB_INSTANCES.USERS_INSTANCE), userObject);
+        const responseDocRef = await setDoc(doc(database, DB_INSTANCES.USERS_INSTANCE, username), userObject);
         return new Response(ResponseType.SUCCESS, responseDocRef);
     } catch (e) {
         return new Response(ResponseType.ERROR, e);
