@@ -145,7 +145,11 @@ const SideBar = () => {
 			<div className='flex-1 flex flex-col w-full gap-2'>
 			</div>
 			<div className='flex-1 flex flex-col justify-end items-start w-full'>
-				<div title={isSidebarCollapsed && `${userDetails?.displayName}`} onClick={() => handleLogout()} className='flex flex-row p-2 items-center gap-4 cursor-pointer hover:bg-yellow-500/30 border-yellow-500 w-full rounded-lg'>
+				<div
+					title={isSidebarCollapsed && `${userDetails?.displayName}`}
+					onClick={() => handleLogout()}
+					className='flex flex-row p-2 items-center gap-4 cursor-pointer hover:bg-yellow-500/30 border-yellow-500 w-full rounded-lg'
+				>
 					<img
 						className=' object-cover w-[2.5rem] h-[2.5rem] shadow-2xl rounded-full'
 						src='https://gizmodo.com.au/wp-content/uploads/2022/03/02/the-batman-review.jpg?quality=75&w=640&h=360&crop=1'

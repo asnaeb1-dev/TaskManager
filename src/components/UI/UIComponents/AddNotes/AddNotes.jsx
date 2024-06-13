@@ -5,6 +5,7 @@ import { AddNotesContextInstance } from '../../../data/AppContext/AddNotesContex
 import { ADD_NOTE, APP_DESIGN_COLORS, NOTES_COLOR, TODO_TYPE, TODO_TYPES, TaskPriority } from '../../../data/Utils/Strings';
 
 import { RxCross1 } from "react-icons/rx";
+import { Oval } from 'react-loader-spinner';
 
 // import "./addnotes.css"
 import ColorSelector from './AddNotesComponents/ColorSelector/ColorSelector';
@@ -14,6 +15,7 @@ import TaskStateSelector from './AddNotesComponents/TaskStateSelector/TaskStateS
 import PrivacySelector from './AddNotesComponents/PrivacySelector/PrivacySelector';
 import TagPicker from './AddNotesComponents/TagPicker/TagPicker';
 import ProgressPicker from './AddNotesComponents/ProgressPicker/ProgressPicker';
+import { useMutation } from '@tanstack/react-query';
 
 const AddNotes = () => {
     const { isAddNotesOpen, setAddNotesOpen } = useContext(AddNotesContextInstance)
@@ -48,13 +50,13 @@ const AddTaskForm = ({ handleNoteSubmit }) => {
     const [taskData, setTaskData] = useState({
         taskTitle: "",
         taskType: "",
-        taskId: 22121321,
+        taskId: `${Math.floor(Math.random() * 1000000)}-${Math.floor(Math.random() * 1000)}`,
         isTaskPrivate: false,
         taskPriority: TaskPriority.HIGH,
         taskNoteColor: "",
         taskTags: [],
-        taskStartTime: "",
-        taskEndTime: "",
+        taskStartTime: {},
+        taskEndTime: {},
         taskDescription: "",
         taskProgress: {}
     })
@@ -91,16 +93,46 @@ const AddTaskForm = ({ handleNoteSubmit }) => {
                     tempTaskInfo.taskProgress = info;
                     return tempTaskInfo;
                 
+                case "tags":
+                    tempTaskInfo.taskTags = info;
+                    return tempTaskInfo;
+
+                case "taskType":
+                    tempTaskInfo.taskType = info;
+                    return tempTaskInfo;
+
+                case "taskTime":
+                    tempTaskInfo.taskStartTime = info.startTime;
+                    tempTaskInfo.taskEndTime = info.endTime;
+                    return tempTaskInfo;
+
                 default:
                     return tempTaskInfo;
             }
         })
     }
+
+    const {
+        isPending: addTaskPending,
+        isError: addTaskHasError,
+        error: addTaskError,
+        mutate: addTaskMutation
+    } = useMutation({
+        mutationFn: () => {},
+        onSuccess: (data) => { console.log(data) },
+        onError: (err) => {
+            console.log(err);
+        }
+    })
     
+    const submitNote = () => {
+        addTaskMutation(taskData);
+    }
+
     return (
         <div onSubmit={handleNoteSubmit} className='h-full flex flex-col gap-7 my-6 text-sm overflow-y-auto'>
             <div role='notetitle' className='w-full flex flex-row border-b-2 focus:border-yellow-500 pb-2'>
-                <select defaultValue={"def"} className=' outline-none font-semibold rounded-lg p-2 bg-yellow-500/25 text-black'>
+                <select onChange={e => updateTaskData("taskType", e.target.value)} defaultValue={"def"} className=' outline-none font-semibold rounded-lg p-2 bg-yellow-500/25 text-black'>
                     <option value={"def"} disabled selected hidden>{TODO_TYPE}</option>
                     <option value={"Task"}>{TODO_TYPES.TASK}</option>
                     <option value={"Habit"}>{TODO_TYPES.HABIT}</option>
@@ -129,20 +161,39 @@ const AddTaskForm = ({ handleNoteSubmit }) => {
                 taskPriority={taskData.taskPriority}
                 setTaskPriority={priority => updateTaskData("priority", priority)}
             />
-            <TagPicker updateTagList={tagList => console.log(tagList)} tagList={[]} />
+            <TagPicker
+                updateTagList={tagList => updateTaskData("tags", tagList)}
+                tagList={taskData.taskTags}
+            />
             <ColorSelector
                 colorSelected={taskData.taskNoteColor}
                 handleColorSelect={color => updateTaskData("color", color)}
             />
-            <DurationPicker />
+            <DurationPicker
+                updateTimeDuration={duration => updateTaskData("taskTime", duration)}
+            />
             <div className='flex flex-col gap-2'>
                 <p className=' font-semibold'>Description</p>
                 <textarea onChange={e => updateTaskData("desc", e.target.value)} placeholder='Task Description' className='border-2 text-yellow-500 focus:border-yellow-500 rounded-lg w-full h-[100px]  lg:h-[calc(100vh_-_740px)] lg:min-h-[calc(100vh_-_740px)] lg:max-h-[calc(100vh_-_740px)] outline-none p-2'></textarea>
             </div>
             <TaskStateSelector />
-            <div className='flex absolute items-center bg-white h-14 bottom-0'>
+            <div onClick={submitNote} className='flex absolute items-center bg-white h-14 bottom-0'>
                 <button className=' bg-yellow-500/50 px-5 py-2 rounded-lg font-semibold  hover:scale-105'>
-                    {ADD_NOTE}
+                    {
+                        !addTaskPending ?
+                            <p>{ADD_NOTE}</p> :
+                            <span>
+                                <Oval
+                                    visible={addTaskPending}
+                                    height="20"
+                                    width="20"
+                                    color="white"
+                                    ariaLabel="oval-loading"
+                                    wrapperStyle={{}}
+                                    wrapperClass=""
+                                />
+                            </span> 
+                    }
                 </button>
             </div>
         </div>

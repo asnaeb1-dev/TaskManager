@@ -1,11 +1,10 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut, updateProfile } from "firebase/auth"
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut, updateProfile, sendSignInLinkToEmail } from "firebase/auth"
 import { addDoc, collection, doc, getDoc, getFirestore, setDoc } from "firebase/firestore";
 import { firebaseConfig } from "./firebaseConfig";
 import { DB_INSTANCES, ResponseType, TODO_TYPES } from "../Utils/Strings";
 import Response from "../Utils/Response";
 import firebase from "firebase/compat/app";
-import { get } from "firebase/database";
 
 const app = initializeApp(firebaseConfig);
 
@@ -36,6 +35,13 @@ export const getUserDetailsFromDB = async (username = "") => {
     }
 }
 
+export const addNewTaskToDB = async ({ taskDetails }) => {
+    try {
+
+    } catch(e) {
+
+    }
+}
 
 export const createDatabaseInstanceForUser = async (email = "", username = "", dob = "", phoneNumber = 0) => {
     const userObject = {

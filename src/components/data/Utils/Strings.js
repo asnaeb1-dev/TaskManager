@@ -27,6 +27,8 @@ export const EMPTY_NOTES = "No Tasks here";
 export const ADD_NOTE = "Add Note";
 export const TODO_TYPE = "Todo Type";
 export const PROGRESS_TASK = "Task Progress";
+export const START_TIME = "Start Time";
+export const END_TIME = "End Time";
 export const TODO_TYPES =  {
     TASK: "Task",
     HABIT: "Habit",

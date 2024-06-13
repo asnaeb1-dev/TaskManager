@@ -5,12 +5,18 @@ import { TaskerAppContext } from '../../../data/AppContext/AppContext';
 
 const NotesScreen = () => {
     const { userDetails, setUserDetails } = useContext(TaskerAppContext);
-    const [notesList, setNoteList] = useState(userDetails?.dbResponse?.todoList?.Chore || []);
+    const [notesList, setNoteList] = useState([]);
 
 
     useEffect(() => {
-        // if(userDetails?.dbResponse?.)
-        console.log(notesList);
+        if(userDetails) {
+            const choreList = userDetails?.dbResponse?.todoList?.Chore ?? [];
+            const habitList = userDetails?.dbResponse?.todoList?.Habit ?? [];
+            const miscList = userDetails?.dbResponse?.todoList?.Misc ?? [];
+            const reminderList = userDetails?.dbResponse?.todoList?.Reminder ?? [];
+            const taskList = userDetails?.dbResponse?.todoList?.Task ?? [];
+            setNoteList([...choreList, ...miscList, ...reminderList, ...taskList, ...habitList])
+        }
     }, [userDetails])
 
     return (

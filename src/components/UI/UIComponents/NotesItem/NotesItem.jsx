@@ -6,7 +6,8 @@ import { FaCheck } from "react-icons/fa";
 import { ImCross } from "react-icons/im";
 
 const NotesItem = ({ notesProps, index, setsIsDone }) => {
-    const { taskTitle, description, isDone } = notesProps;
+    const { taskTitle, taskDescription, isTaskPrivate } = notesProps;
+    console.log("title", taskTitle);
     return (
         // <Draggable></Draggable>
         <div className={`w-full h-full bg-yellow-900 rounded-b-2xl rounded-tl-2xl`}>
@@ -16,7 +17,7 @@ const NotesItem = ({ notesProps, index, setsIsDone }) => {
             >
                 <div className='flex flex-col flex-1'>
                     <h1 className=' font-extrabold text-3xl text-zinc-700 overflow-hidden whitespace-nowrap text-ellipsis'>{taskTitle}</h1>
-                    <p className='overflow-hidden max-h-[100px] py-1'>{description}</p>
+                    <p className='overflow-hidden max-h-[100px] py-1'>{taskDescription}</p>
                 </div>
                 <div className='w-full flex flex-row justify-end gap-3'>
                     <button className=' bg-white/50 p-2 rounded-full hover:bg-white/75'>
@@ -26,7 +27,7 @@ const NotesItem = ({ notesProps, index, setsIsDone }) => {
                         <MdDelete size={20} />
                     </button>
                     <button role='done' onClick={() => setsIsDone()} className=' bg-white/50 p-2 rounded-full hover:bg-white/75'>
-                        {isDone ? <FaCheck size={20} /> : <ImCross size={18} />}
+                        {isTaskPrivate ? <FaCheck size={20} /> : <ImCross size={18} />}
                     </button>
                 </div>
             </div>

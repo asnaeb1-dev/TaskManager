@@ -34,6 +34,7 @@ const TagPicker = ({ updateTagList }) => {
 
     const handleTagRemove = (index) => {
         setTags((tagList) => tagList.filter((_, ind) => ind !== index));
+        updateTagList(tags);
     }
 
     return (
