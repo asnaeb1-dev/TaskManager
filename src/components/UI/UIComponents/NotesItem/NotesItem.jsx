@@ -6,7 +6,7 @@ import { FaCheck } from "react-icons/fa";
 import { ImCross } from "react-icons/im";
 
 const NotesItem = ({ notesProps, index, setsIsDone }) => {
-    const { title, description, isDone } = notesProps;
+    const { taskTitle, description, isDone } = notesProps;
     return (
         // <Draggable></Draggable>
         <div className={`w-full h-full bg-yellow-900 rounded-b-2xl rounded-tl-2xl`}>
@@ -15,7 +15,7 @@ const NotesItem = ({ notesProps, index, setsIsDone }) => {
                 className='w-full flex flex-col select-none h-full rounded-2xl p-4 cursor-pointer  hover:shadow-2xl max-h-[250px] min-h-[250px]'
             >
                 <div className='flex flex-col flex-1'>
-                    <h1 className=' font-extrabold text-3xl text-zinc-700 overflow-hidden whitespace-nowrap text-ellipsis'>{title}</h1>
+                    <h1 className=' font-extrabold text-3xl text-zinc-700 overflow-hidden whitespace-nowrap text-ellipsis'>{taskTitle}</h1>
                     <p className='overflow-hidden max-h-[100px] py-1'>{description}</p>
                 </div>
                 <div className='w-full flex flex-row justify-end gap-3'>

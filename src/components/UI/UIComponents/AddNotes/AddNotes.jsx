@@ -48,6 +48,7 @@ const AddTaskForm = ({ handleNoteSubmit }) => {
     const [taskData, setTaskData] = useState({
         taskTitle: "",
         taskType: "",
+        taskId: 22121321,
         isTaskPrivate: false,
         taskPriority: TaskPriority.HIGH,
         taskNoteColor: "",
