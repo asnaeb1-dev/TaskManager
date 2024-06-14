@@ -10,13 +10,15 @@ const AppContext = ({ children }) => {
 
     const [showUserProfile, setShowUserProfile] = useState(false);
     const [userDetails, setUserDetails] = useState({})
+    const [userTaskDetails, setUserTaskDetails] = useState({})
     const contextState = {
         appState, setAppState,
         currentPage, setCurrentPage,
         darkMode, setDarkMode,
 
         userDetails, setUserDetails,
-        showUserProfile, setShowUserProfile
+        showUserProfile, setShowUserProfile,
+        userTaskDetails, setUserTaskDetails
     }
     return (
         <TaskerAppContext.Provider value={contextState}>

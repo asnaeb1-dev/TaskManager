@@ -16,15 +16,6 @@ const LoginSignupScreen = () => {
 	const [showToast, setShowToast] = useState(false);
 	const [toastProps, setToastProps] = useState({})
 
-	//check if user is logged in
-	useLayoutEffect(() => {
-		isUserLoggedIn(user => {
-			if(user) {
-				navigate(PATHS.DASHBOARD, {replace: true});
-			}
-		})
-	}, [])
-
 	const {
 		mutate: loginUserMutation,
 		isError: loginUserHasError,
@@ -76,9 +67,9 @@ const LoginSignupScreen = () => {
 						message: ACCOUNT_CREATION_SUCCESS,
 						duration: 3000
 					});
-					setTimeout(() => {
-						// navigate(PATHS.DASHBOARD, { replace: true })
-					}, 2000)
+					// setTimeout(() => {
+					// 	navigate(PATHS.DASHBOARD, { replace: true })
+					// }, 2000)
 					return;
 				}
 			} 

@@ -18,11 +18,14 @@ import ProgressPicker from './AddNotesComponents/ProgressPicker/ProgressPicker';
 import { useMutation } from '@tanstack/react-query';
 
 const AddNotes = () => {
-    const { isAddNotesOpen, setAddNotesOpen } = useContext(AddNotesContextInstance)
+    const { isAddNotesOpen, setAddNotesOpen, userTaskDetails, setUserTaskDetails } = useContext(AddNotesContextInstance)
 
     if (!isAddNotesOpen ) return null;
     return createPortal(
-        <div role='add-notes-portal' className='w-full h-full inset-0 bg-black/30 absolute z-10 '>
+        <div
+            role='add-notes-portal'
+            className='w-full h-full inset-0 bg-black/30 absolute z-10 '
+        >
             <div className={`h-[90%] rounded-tr-lg bottom-0 w-full md:h-full lg:w-[500px] flex flex-col rounded-tl-lg rounded-bl-lg bg-white p-4 z-20 absolute animateSlideIn md:right-0`}>
                 <AddTaskHeader setAddNotesOpen={() => setAddNotesOpen(false)} />
                 <AddTaskForm />
@@ -39,14 +42,14 @@ const AddTaskHeader = ({ setAddNotesOpen }) => {
                 <RxCross1 color={APP_DESIGN_COLORS.MAIN_COLOR} size={18} />
             </button>
             <h1 className=' text-2xl font-semibold'>
-                Add Note
+                {ADD_NOTE}
             </h1>
         </div>
     )
 }
 
 const AddTaskForm = ({ handleNoteSubmit }) => {
-    
+
     const [taskData, setTaskData] = useState({
         taskTitle: "",
         taskType: "",
@@ -112,23 +115,6 @@ const AddTaskForm = ({ handleNoteSubmit }) => {
         })
     }
 
-    const {
-        isPending: addTaskPending,
-        isError: addTaskHasError,
-        error: addTaskError,
-        mutate: addTaskMutation
-    } = useMutation({
-        mutationFn: () => {},
-        onSuccess: (data) => { console.log(data) },
-        onError: (err) => {
-            console.log(err);
-        }
-    })
-    
-    const submitNote = () => {
-        addTaskMutation(taskData);
-    }
-
     return (
         <div onSubmit={handleNoteSubmit} className='h-full flex flex-col gap-7 my-6 text-sm overflow-y-auto'>
             <div role='notetitle' className='w-full flex flex-row border-b-2 focus:border-yellow-500 pb-2'>
@@ -177,7 +163,7 @@ const AddTaskForm = ({ handleNoteSubmit }) => {
                 <textarea onChange={e => updateTaskData("desc", e.target.value)} placeholder='Task Description' className='border-2 text-yellow-500 focus:border-yellow-500 rounded-lg w-full h-[100px]  lg:h-[calc(100vh_-_740px)] lg:min-h-[calc(100vh_-_740px)] lg:max-h-[calc(100vh_-_740px)] outline-none p-2'></textarea>
             </div>
             <TaskStateSelector />
-            <div onClick={submitNote} className='flex absolute items-center bg-white h-14 bottom-0'>
+            <div onClick={() => handleNoteSubmit(taskData)} className='flex absolute items-center bg-white h-14 bottom-0'>
                 <button className=' bg-yellow-500/50 px-5 py-2 rounded-lg font-semibold  hover:scale-105'>
                     {
                         !addTaskPending ?
