@@ -3,9 +3,11 @@ import { FcGoogle } from "react-icons/fc";
 import { FaMeta } from "react-icons/fa6";
 
 import { Oval } from 'react-loader-spinner';
+import { useNavigate } from 'react-router-dom';
+import { PATHS } from '../../../data/Utils/Strings';
 
 const LoginComponent = ({ submitUserCredentialsForLogin, swapLoginSignup, isLoading, handleGoogleLogin }) => {
-
+    const navigate = useNavigate();
     const handleLoginFormSubmit = e => {
         e.preventDefault()
         const email = e.target.email.value;
@@ -48,7 +50,7 @@ const LoginComponent = ({ submitUserCredentialsForLogin, swapLoginSignup, isLoad
                 <form className='flex flex-col w-full gap-3' onSubmit={handleLoginFormSubmit}>
                     <input name="email" className='w-full border-2 text-yellow-500 rounded-lg p-3 outline-yellow-500' placeholder='Email' type={"email"} />
                     <input name="password" className='w-full text-yellow-500 border-2 rounded-lg p-3 outline-yellow-500' placeholder='Password' type={"password"} />
-                    <button disabled={isLoading} className=' text-right text-sm text-yellow-500 font-bold hover:underline'>Forgot password?</button>
+                    <button onClick={() => navigate(PATHS.DASHBOARD, { replace: true })} disabled={isLoading} className=' text-right text-sm text-yellow-500 font-bold hover:underline'>Forgot password?</button>
                     <button disabled={isLoading} className='border-2 bg-yellow-500 p-3 rounded-lg text-white text-sm border-yellow-500 flex items-center justify-center'>
                         {
                             !isLoading ?
@@ -67,7 +69,7 @@ const LoginComponent = ({ submitUserCredentialsForLogin, swapLoginSignup, isLoad
                 </form>
                 <div className='flex flex-row text-sm justify-center mt-5 gap-1'>
                     <h1>Don't have an account?</h1>
-                    <button disabled={isLoading} onClick={() => swapLoginSignup("createaccount")} className='font-bold text-yellow-500 hover:underline '>Sign up</button>
+                    <button disabled={isLoading} onClick={() => swapLoginSignup("createaccount")} className='font-bold text-yellow-500 hover:underline cursor-pointer '>Sign up</button>
                 </div>
             </div>
         </div>

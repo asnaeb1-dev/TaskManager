@@ -1,3 +1,27 @@
-.animateSidebar {
-    animation: slideIn ;
+.animateSlideOut {
+    animation: slideOutSidebar 0.3s linear;
+}
+
+.animateSlideInSidebar {
+    animation: slideInSidebar 0.3s linear;
+}
+
+@keyframes slideOutSidebar {
+    from {
+        width: 5.3rem;
+    }
+
+    to {
+        width: 285px;
+    }
+}
+
+@keyframes slideInSidebar {
+    from {
+        width: 285px;
+    }
+
+    to {
+        width: 5.3rem;
+    }
 }

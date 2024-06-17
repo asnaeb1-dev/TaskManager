@@ -1,142 +1,24 @@
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import NotesItem from '../../UIComponents/NotesItem/NotesItem';
 import HorizontalCalander from '../../UIComponents/HorizontalCalander/HorizontalCalander';
+import { TaskerAppContext } from '../../../data/AppContext/AppContext';
 
 const NotesScreen = () => {
-    const [notesList, setNoteList] = useState([
-        {
-            id: 1,
-            title: "Feed the dogs vigeyovrevurev",
-            description: "pirwuvguvirew",
-            startTime: Date.now(),
-            endTime: Date.now(),
-            isDone: false,
-            isUrgent: false,
-            dateCreated: "23rd April, 2024",
-            isMovableToNextDate: false,
-        },
-        {
-            id: 2,
-            title: "wbrbwtbwbtrb",
-            description: "Feed the dogs andnj;ergnegrere",
-            startTime: Date.now(),
-            endTime: Date.now(),
-            isDone: false,
-            isUrgent: false,
-            dateCreated: "23rd April, 2024",
-            isMovableToNextDate: false,
-        },
-        {
-            id: 3,
-            title: "cxcvvsfdvfdsfdsbfd",
-            description: "Feed the dogs andnj;ergnegrere",
-            startTime: Date.now(),
-            endTime: Date.now(),
-            isDone: false,
-            isUrgent: false,
-            dateCreated: "23rd April, 2024",
-            isMovableToNextDate: false,
-        },
-        {
-            id: 4,
-            title: "liu,li,il,i",
-            description: "Feed the dogs andnj;ergnegrere",
-            startTime: Date.now(),
-            endTime: Date.now(),
-            isDone: false,
-            isUrgent: false,
-            dateCreated: "23rd April, 2024",
-            isMovableToNextDate: false,
-        },
-        {
-            id: 5,
-            title: "Feed the dogs",
-            description: "Feed the dogs andnj;ergnegrere Feed the dogs andnj;ergnegrere Feed the dogs andnj;ergnegrere Feed the dogs andnj;ergnegrere Feed the dogs andnj;ergnegrere Feed the dogs andnj;ergnegrere ",
-            startTime: Date.now(),
-            endTime: Date.now(),
-            isDone: false,
-            isUrgent: false,
-            dateCreated: "23rd April, 2024",
-            isMovableToNextDate: false,
-        },
-        {
-            id: 6,
-            title: "wbrbwtbwbtrb",
-            description: "Feed the dogs andnj;ergnegrere",
-            startTime: Date.now(),
-            endTime: Date.now(),
-            isDone: false,
-            isUrgent: false,
-            dateCreated: "23rd April, 2024",
-            isMovableToNextDate: false,
-        },
-        {
-            id: 7,
-            title: "cxcvvsfdvfdsfdsbfd",
-            description: "Feed the dogs andnj;ergnegrere",
-            startTime: Date.now(),
-            endTime: Date.now(),
-            isDone: false,
-            isUrgent: false,
-            dateCreated: "23rd April, 2024",
-            isMovableToNextDate: false,
-        },
-        {
-            id: 8,
-            title: "liu,li,il,i",
-            description: "Feed the dogs andnj;ergnegrere",
-            startTime: Date.now(),
-            endTime: Date.now(),
-            isDone: false,
-            isUrgent: false,
-            dateCreated: "23rd April, 2024",
-            isMovableToNextDate: false,
-        },
-        {
-            id: 9,
-            title: "Feed the dogs",
-            description: "Feed the dogs andnj;ergnegrere Feed the dogs andnj;ergnegrere Feed the dogs andnj;ergnegrere Feed the dogs andnj;ergnegrere Feed the dogs andnj;ergnegrere Feed the dogs andnj;ergnegrere ",
-            startTime: Date.now(),
-            endTime: Date.now(),
-            isDone: false,
-            isUrgent: false,
-            dateCreated: "23rd April, 2024",
-            isMovableToNextDate: false,
-        },
-        {
-            id: 10,
-            title: "wbrbwtbwbtrb",
-            description: "Feed the dogs andnj;ergnegrere",
-            startTime: Date.now(),
-            endTime: Date.now(),
-            isDone: false,
-            isUrgent: false,
-            dateCreated: "23rd April, 2024",
-            isMovableToNextDate: false,
-        },
-        {
-            id: 11,
-            title: "cxcvvsfdvfdsfdsbfd",
-            description: "Feed the dogs andnj;ergnegrere",
-            startTime: Date.now(),
-            endTime: Date.now(),
-            isDone: false,
-            isUrgent: false,
-            dateCreated: "23rd April, 2024",
-            isMovableToNextDate: false,
-        },
-        {
-            id: 12,
-            title: "liu,li,il,i",
-            description: "Feed the dogs andnj;ergnegrere",
-            startTime: Date.now(),
-            endTime: Date.now(),
-            isDone: false,
-            isUrgent: false,
-            dateCreated: "23rd April, 2024",
-            isMovableToNextDate: false,
+    const { userDetails, userTaskDetails } = useContext(TaskerAppContext);
+    const [notesList, setNoteList] = useState([]);
+
+
+    useEffect(() => {
+        if(userTaskDetails && userDetails) {
+            const choreList = userTaskDetails?.todoList?.Chore ?? [];
+            const habitList = userTaskDetails?.todoList?.Habit ?? [];
+            const miscList = userTaskDetails?.todoList?.Misc ?? [];
+            const reminderList = userTaskDetails?.todoList?.Reminder ?? [];
+            const taskList = userTaskDetails?.todoList?.Task ?? [];
+            setNoteList([...choreList, ...miscList, ...reminderList, ...taskList, ...habitList])
         }
-    ]);
+    }, [userTaskDetails, userDetails])
+
     return (
         <div className='w-[calc(100vw_-_5.3rem)] h-[calc(100vh_-_4rem)] overflow-y-scroll absolute z-[0] right-0 px-4 py-2'>
             <div className='w-full h-20 sticky top-0 bg-white rounded-xl shadow-md'>
@@ -146,7 +28,11 @@ const NotesScreen = () => {
                 {
                     notesList?.map((note, index) => {
                         return (
-                            <NotesItem index={index % 5} key={note.id} notesProps={note} />
+                            <NotesItem
+                                index={index % 5}
+                                key={note.id}
+                                notesProps={note}
+                            />
                         )
                     })
                 }

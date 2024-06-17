@@ -77,7 +77,6 @@ export const getMonth = (month) => {
 }
 
 /**
- * 
  * @param {*} day 
  * @returns day of the week
  */
@@ -100,4 +99,19 @@ export const getDay = (day) => {
         default:
             return "";
     }
+}
+
+/**
+ * 
+ * @returns a random color 
+ */
+export const getRandomColor = () => {
+    return `
+        rgba(
+            ${Math.floor(Math.random() * 255)}, 
+            ${Math.floor(Math.random() * 255)}, 
+            ${Math.floor(Math.random() * 255)},
+            1
+        )
+    `
 }

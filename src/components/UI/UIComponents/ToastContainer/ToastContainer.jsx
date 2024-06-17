@@ -25,9 +25,8 @@ export const ToastTypes = {
     NOTE: 4
 };
 
-const ToastContainer = ({ type = ToastTypes.INFO, message = "Hello World", duration = 1000, onClose, showToast }) => {
+const ToastContainer = ({ type = -1, message = "", duration = 1000, onClose, showToast = false }) => {
     const [isHover, setHover] = useState(false);
-
     const getIcon = type => {
         switch (type) {
             case ToastTypes.INFO:
@@ -66,6 +65,12 @@ const ToastContainer = ({ type = ToastTypes.INFO, message = "Hello World", durat
                 return "bg-blue-500/85";
         }
     }
+
+    useEffect(() => {
+        setTimeout(() => {
+            // onClose();
+        }, duration = 1000)
+    }, [duration])
 
     const getProgressBarColor = type => {
         switch (type) {

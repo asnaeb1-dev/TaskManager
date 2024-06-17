@@ -1,24 +1,49 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth"
-import { addDoc, collection, getFirestore } from "firebase/firestore";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut, updateProfile, sendSignInLinkToEmail } from "firebase/auth"
+import { addDoc, collection, doc, getDoc, getFirestore, setDoc } from "firebase/firestore";
 import { firebaseConfig } from "./firebaseConfig";
 import { DB_INSTANCES, ResponseType, TODO_TYPES } from "../Utils/Strings";
 import Response from "../Utils/Response";
+import firebase from "firebase/compat/app";
+
 const app = initializeApp(firebaseConfig);
 
 const auth = getAuth();
 const database = getFirestore(app);
 
+
 export const loginUserWithEmailAndPassword = async ({email = "", password =""}) => {
     try {
         const response = await signInWithEmailAndPassword(auth, email, password);
-        return response
+        return new Response(ResponseType.SUCCESS, response);
     } catch (e) {
-        return e;
+        return new Response(ResponseType.ERROR, e);
     }
 }
 
-export const createDatabaseInstanceForUser = async ({ email = "", username = "", dob = "", phoneNumber = 0 }) => {
+export const getUserDetailsFromDB = async (username = "") => {
+    try {
+        const docSnapshotResponse = await getDoc(doc(database, DB_INSTANCES.USERS_INSTANCE, username));
+        if(docSnapshotResponse.exists()) {
+            const responseData = await docSnapshotResponse.data()
+            return new Response(ResponseType.SUCCESS, responseData);
+        } else {
+            return new Response(ResponseType.INFO, { details: "User details unavailable" });
+        }
+    } catch (e) {
+        return new Response(ResponseType.ERROR, e);
+    }
+}
+
+export const addNewTaskToDB = async ({ taskDetails }) => {
+    try {
+
+    } catch(e) {
+
+    }
+}
+
+export const createDatabaseInstanceForUser = async (email = "", username = "", dob = "", phoneNumber = 0) => {
     const userObject = {
         username,
         email,
@@ -39,17 +64,29 @@ export const createDatabaseInstanceForUser = async ({ email = "", username = "",
         }
     }
     try {
-        const responseDocRef = await addDoc(collection(database, DB_INSTANCES.USERS_INSTANCE), userObject);
+        const responseDocRef = await setDoc(doc(database, DB_INSTANCES.USERS_INSTANCE, username), userObject);
         return new Response(ResponseType.SUCCESS, responseDocRef);
     } catch (e) {
         return new Response(ResponseType.ERROR, e);
     }
 }
 
-export const createAccountWithEmailAndPassword = async({email = "", password = ""}) => {
+export const logoutUser = async() => {
+    try {
+        const logoutResponse = await signOut(auth);
+        console.log(logoutResponse);
+        return new Response(ResponseType.SUCCESS, logoutResponse);
+    } catch (e) {
+        return new Response(ResponseType.ERROR, e);
+    }
+}
+
+export const createAccountWithEmailAndPassword = async({email = "", password = "", username = "", dob = ""}) => {
     try {
         const response = await createUserWithEmailAndPassword(auth, email, password);
-        const responseObject = new Response(ResponseType.SUCCESS, response);
+        const updationResponse = await updateProfile(auth.currentUser, {displayName: username})
+        const dbInstanceResponse = await createDatabaseInstanceForUser(email, username, dob);
+        const responseObject = new Response(ResponseType.SUCCESS, { response, dbInstanceResponse, updationResponse});
         return responseObject;
     } catch(e) {
         const responseObject = new Response(ResponseType.ERROR, e);
@@ -58,10 +95,10 @@ export const createAccountWithEmailAndPassword = async({email = "", password = "
     }
 }
 
-export const isUserLoggedIn = () => {
-    const user = auth.currentUser;
-    console.log("current-", user);
-    return user;
+export const isUserLoggedIn = (cb) => {
+    onAuthStateChanged(auth, user => {
+        cb(user);
+    })
 }
 
 export const authenticateUsingGoogle = async () => {

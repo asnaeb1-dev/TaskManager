@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import RouterRoutes from '../../Routes/Routes'
 
 const App = () => {
+
 	return (
 		<div className='absolute inset-0 w-full h-full overflow-hidden'>
 			<RouterRoutes />

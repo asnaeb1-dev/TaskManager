@@ -1,121 +1,94 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import LoginComponent from '../../UIComponents/LoginComponent/LoginComponent';
 import SignupComponent from '../../UIComponents/SignupComponent/SignupComponent';
-import { authenticateUsingGoogle, createAccountWithEmailAndPassword, createDatabaseInstanceForUser, isUserLoggedIn, loginUserWithEmailAndPassword } from '../../../data/Services/Api';
+import { authenticateUsingGoogle, createAccountWithEmailAndPassword, isUserLoggedIn, loginUserWithEmailAndPassword } from '../../../data/Services/Api';
 import ToastContainer, { ToastTypes } from '../../UIComponents/ToastContainer/ToastContainer';
-import { APP_TITLE, PATHS, ResponseType } from '../../../data/Utils/Strings';
+import { ACCOUNT_CREATION_FAILED, ACCOUNT_CREATION_SUCCESS, APP_TITLE, GOOGLE_LOGIN_SUCCESS, LOGIN_FAILED, LOGIN_SUCCESS, PATHS, ResponseType } from '../../../data/Utils/Strings';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 
 import BackImage from "../../../../assets/back.svg";
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 const LoginSignupScreen = () => {
 	const navigate = useNavigate();
-	const [userCredentialsForLogin, setUserCredentialsForLogin] = useState({
-		emailAddress: "",
-		password: ""
-	});
-
-	const [loginStatus] = useState(isUserLoggedIn);
-
+	const auth = getAuth();
 	const [currentPage, setCurrentPage] = useState("login"); //createaccount | login
 	const [showToast, setShowToast] = useState(false);
-	const [isLoading, setLoading] = useState(false);
-	const [toastProps, setToastProps] = useState({
-		type: 0,
-        message: "Hello World",
-        duration: 1000,
-	})
-
-	useLayoutEffect(() => {
-		if(loginStatus) {
-			navigate(PATHS.DASHBOARD, { replace: true })
-		}
-	}, [loginStatus])
-
+	const [toastProps, setToastProps] = useState({});
 
 	useEffect(() => {
-		if(!userCredentialsForLogin.emailAddress || !userCredentialsForLogin.password) return;
-		setLoading(true);
-		(async () => {
-			const loginResponse = await loginUserWithEmailAndPassword(userCredentialsForLogin.emailAddress, userCredentialsForLogin.password);
-			// console.log(loginResponse);
-			setShowToast(true);
-			if(loginResponse.responseType === ResponseType.SUCCESS) {
-				setToastProps({
-					type: 1,
-                    message: "Login Success",
-                    duration: 1000
-				})
-			} else {
-				setToastProps({
-					type: 2,
-                    message: "Sorry! Login failed",
-                    duration: 1000
-				})
+		onAuthStateChanged(auth, user => {
+			console.log("user", user);
+			if(user) {
+				navigate(PATHS.DASHBOARD, { replace: true });
 			}
-			setLoading(false)
-			setUserCredentialsForLogin(LOGIN_OBJECT);
-		})()
-	}, [userCredentialsForLogin])
+		})
+	}, [auth])
+
+	const {
+		mutate: loginUserMutation,
+		isError: loginUserHasError,
+		error: loginUserError,
+        isPending: loginUserIsPending
+	} = useMutation({
+		mutationFn: loginUserWithEmailAndPassword,
+        onSuccess: (data) => {
+            console.log("login success", data)
+            if(data?.responseType === ResponseType.SUCCESS) {
+                if(data?.response?.user?.accessToken) {
+                    setShowToast(true)
+                    setToastProps({
+                        type: ToastTypes.SUCCESS,
+                        message: LOGIN_SUCCESS,
+                        duration: 3000
+                    });
+                    setTimeout(() => {
+                        navigate(PATHS.DASHBOARD, { replace: true })
+                    }, 2000)
+                    return;
+                }
+            } 
+            setShowToast(true);
+            setToastProps({
+                type: ToastTypes.ERROR,
+                message: LOGIN_FAILED,
+                duration: 3000
+            });
+        },
+	})
 
 	//create account 
 	const { 
 		mutate: createAccountMutation,
 		isError: createAccountHasError,
 		error: createAccountError,
-		isPending: createAccountPending
+		isPending: createAccountPending,
+		
 	} = useMutation({
 		mutationFn: createAccountWithEmailAndPassword,
 		onSuccess: (data) => {
 			console.log("create account success", data)
-			setShowToast(true);
-			setToastProps({
-				type: 1,
-				message: "Account creation successful!",
-				duration: 1000
-			})
 			if(data?.responseType === ResponseType.SUCCESS) {
-				if(data?.response?.user?.accessToken) {
-					navigate(PATHS.DASHBOARD, { replace: true })
-					setSignUpSuccess();
+				if(data?.response?.response?.user?.accessToken) {
+					setShowToast(true)
+					setToastProps({
+						type: ToastTypes.SUCCESS,
+						message: ACCOUNT_CREATION_SUCCESS,
+						duration: 3000
+					});
+					// setTimeout(() => {
+					// 	navigate(PATHS.DASHBOARD, { replace: true })
+					// }, 2000)
+					return;
 				}
-			}
-		},
-		onError: (e) => {
-			console.log(e);
-			setShowToast(true);
-			setToastProps({
-				type: 1,
-				message: "Account creation failed!",
-				duration: 1000
-			})
-		} 
-	})
-
-	const {
-		mutate: createDBInstanceForUser,
-		isError: userInstanceCreationHasError,
-		error: userInstanceCreationError
-	} = useMutation({
-		mutationFn: createDatabaseInstanceForUser,
-		onSuccess: (data) => {
-			console.log("db instance created", data);
-			setShowToast(true);
-			setToastProps({
-				type: ToastTypes.SUCCESS,
-				message: "Account creation Successful!",
-				duration: 1000
-			})
-		},
-		onError: (e) => {
-			console.log(e);
+			} 
 			setShowToast(true);
 			setToastProps({
 				type: ToastTypes.ERROR,
-				message: "Account creation failed!",
+				message: ACCOUNT_CREATION_FAILED,
 				duration: 1000
-			})
+			});
 		}
 	})
 
@@ -127,7 +100,7 @@ const LoginSignupScreen = () => {
 			setShowToast(true);
 			setToastProps({
 				type: 1,
-				message: "Google Login successful!",
+				message: GOOGLE_LOGIN_SUCCESS,
 				duration: 1000
 			})
 			if(data?.responseType === ResponseType.SUCCESS) {
@@ -145,13 +118,14 @@ const LoginSignupScreen = () => {
 		createAccountMutation({
 			email,
 			password,
-		})
-		createDBInstanceForUser({
-			email,
-			password,
 			username,
 			dob
 		})
+	}
+
+	const handleUserLogin = (email, password) => {
+		if(!email || !password) return; 
+		loginUserMutation({email, password})
 	}
 
 	return (
@@ -161,10 +135,10 @@ const LoginSignupScreen = () => {
 				{
 					currentPage === "login" ?
 					<LoginComponent
-						isLoading={googleLoginPending}
+						isLoading={googleLoginPending || loginUserIsPending}
 						handleGoogleLogin={() => googleAuthMutation()}
 						swapLoginSignup={current => setCurrentPage(current)}
-						submitUserCredentialsForLogin={(email, password) => setUserCredentialsForLogin({ emailAddress: email, password })}
+						submitUserCredentialsForLogin={(email, password) => handleUserLogin(email, password)}
 					/>
 					:
 					<SignupComponent
@@ -187,7 +161,7 @@ const LoginSignupScreen = () => {
 				message={toastProps.message}
 				type={toastProps.type}
 				duration={3000}
-				onClose={() => setShowToast(true)} 
+				onClose={() => setShowToast(false)} 
 			/>
 		</div>
 	)
