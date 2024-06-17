@@ -14,6 +14,8 @@ const HomePageScreen = () => {
 		onAuthStateChanged(getAuth(), user => {
 			if(!user) {
 				navigate(PATHS.LOGIN_SIGNUP, { replace: true })
+			} else {
+				setUserDetails(user);
 			}
 		})
 	}, [])

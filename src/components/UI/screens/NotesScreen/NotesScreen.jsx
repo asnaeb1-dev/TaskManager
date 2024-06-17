@@ -1,23 +1,45 @@
-import React, { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import NotesItem from '../../UIComponents/NotesItem/NotesItem';
 import HorizontalCalander from '../../UIComponents/HorizontalCalander/HorizontalCalander';
 import { TaskerAppContext } from '../../../data/AppContext/AppContext';
+import { useQuery } from '@tanstack/react-query';
+import { getTaskFromDB } from '../../../data/Services/Api';
+import { STALE_TIME } from '../../../data/Utils/utils';
+import { ResponseType, TODO_TYPES } from '../../../data/Utils/Strings';
 
 const NotesScreen = () => {
-    const { userDetails, userTaskDetails } = useContext(TaskerAppContext);
+    const { userDetails } = useContext(TaskerAppContext);
     const [notesList, setNoteList] = useState([]);
 
+    const {
+        isLoading: isTaskLoading,
+        isError: isTaskError,
+        error: taskError,
+        data: taskData
+    } = useQuery({
+        queryKey: ["getTaskQuery"],
+        queryFn: () => getTaskFromDB(userDetails?.displayName),
+        retryOnMount: true,
+        staleTime: STALE_TIME,
+        refetchOnReconnect: true
+    })
 
     useEffect(() => {
-        if(userTaskDetails && userDetails) {
-            const choreList = userTaskDetails?.todoList?.Chore ?? [];
-            const habitList = userTaskDetails?.todoList?.Habit ?? [];
-            const miscList = userTaskDetails?.todoList?.Misc ?? [];
-            const reminderList = userTaskDetails?.todoList?.Reminder ?? [];
-            const taskList = userTaskDetails?.todoList?.Task ?? [];
-            setNoteList([...choreList, ...miscList, ...reminderList, ...taskList, ...habitList])
+        console.log("tdata", taskData);
+        if(taskData?.responseType === ResponseType.SUCCESS) {
+            console.log(taskData?.response?.todos)
+            const taskTypes = taskData?.response?.todos;
+            setNoteList([
+                ...taskTypes.Chore,
+            ])
+        } else {
+            setNoteList([]);
         }
-    }, [userTaskDetails, userDetails])
+    }, [taskData])
+
+    useEffect(() => {
+        console.log("notes list", notesList);
+    }, [notesList])
 
     return (
         <div className='w-[calc(100vw_-_5.3rem)] h-[calc(100vh_-_4rem)] overflow-y-scroll absolute z-[0] right-0 px-4 py-2'>

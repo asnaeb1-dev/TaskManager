@@ -49,13 +49,6 @@ export const createDatabaseInstanceForUser = async (email = "", username = "", d
         email,
         dob,
         displayPictureURL: "",
-        todoList: {
-            [TODO_TYPES.TASK]: [],
-            [TODO_TYPES.HABIT]: [],
-            [TODO_TYPES.CHORE]: [],
-            [TODO_TYPES.MISC]: [],
-            [TODO_TYPES.REMINDER]: []
-        },
         phoneNumber,
         settings: {
             isDarkMode: false,
@@ -63,9 +56,34 @@ export const createDatabaseInstanceForUser = async (email = "", username = "", d
             allowPushNotifications: false
         }
     }
+    const userTaskObject = {
+        todos: {
+            [TODO_TYPES.TASK]: [],
+            [TODO_TYPES.HABIT]: [],
+            [TODO_TYPES.CHORE]: [],
+            [TODO_TYPES.MISC]: [],
+            [TODO_TYPES.REMINDER]: []
+        }
+    }
     try {
         const responseDocRef = await setDoc(doc(database, DB_INSTANCES.USERS_INSTANCE, username), userObject);
-        return new Response(ResponseType.SUCCESS, responseDocRef);
+        const responseTaskDocRef = await setDoc(doc(database, DB_INSTANCES.TASKS_INSTANCE, username), userTaskObject);
+        return new Response(ResponseType.SUCCESS, {responseDocRef, responseTaskDocRef});
+    } catch (e) {
+        return new Response(ResponseType.ERROR, e);
+    }
+}
+
+export const getTaskFromDB = async (username = "") => {
+    console.log("HERE");
+    try {
+        const docSnapshotResponse = await getDoc(doc(database, DB_INSTANCES.TASKS_INSTANCE, username));
+        if(docSnapshotResponse.exists()) {
+            const responseData = await docSnapshotResponse.data()
+            return new Response(ResponseType.SUCCESS, responseData);
+        } else {
+            return new Response(ResponseType.ERROR, { details: "Task details unavailable" });
+        }
     } catch (e) {
         return new Response(ResponseType.ERROR, e);
     }
@@ -116,5 +134,3 @@ export const authenticateUsingGoogle = async () => {
     }
     return authResponse;
 }
-
-// export const addUser = ()
