@@ -8,13 +8,23 @@ import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 
 import BackImage from "../../../../assets/back.svg";
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 const LoginSignupScreen = () => {
 	const navigate = useNavigate();
-
+	const auth = getAuth();
 	const [currentPage, setCurrentPage] = useState("login"); //createaccount | login
 	const [showToast, setShowToast] = useState(false);
-	const [toastProps, setToastProps] = useState({})
+	const [toastProps, setToastProps] = useState({});
+
+	useEffect(() => {
+		onAuthStateChanged(auth, user => {
+			console.log("user", user);
+			if(user) {
+				navigate(PATHS.DASHBOARD, { replace: true });
+			}
+		})
+	}, [auth])
 
 	const {
 		mutate: loginUserMutation,
