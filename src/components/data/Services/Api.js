@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut, updateProfile, sendSignInLinkToEmail } from "firebase/auth"
-import { addDoc, collection, doc, getDoc, getDocs, getFirestore, limit, query, setDoc } from "firebase/firestore";
+import { addDoc, collection, doc, getDoc, getDocs, getFirestore, limit, query, setDoc, where } from "firebase/firestore";
 import { firebaseConfig } from "./firebaseConfig";
 import { DB_INSTANCES, ResponseType, TODO_TYPES, TaskPriority } from "../Utils/Strings";
 import Response from "../Utils/Response";
@@ -139,16 +139,11 @@ export const getTaskFromDB = async (username = "") => {
 
 export const getTaskFromDBPaginate = async (username = "") => {
     try{
-        const dbPaginateResponse = query(collection(database, DB_INSTANCES.USERS_INSTANCE, username ,"todoList"), limit(2), )
-        const docsResponse = await  getDocs(dbPaginateResponse)
-        docsResponse.docs.forEach(async (item) => {
-            const res = await item.data();
-            console.log(res);
-        })
-        console.log("stuff", docsResponse, docsResponse.size)
-        // console.log("data", responseList);
+        const dbPaginateResponse = query(collection(database, DB_INSTANCES.USERS_INSTANCE, username ,"todoList"), limit(20));
+        const docsResponse = await  getDocs(dbPaginateResponse);
+        return new Response(ResponseType.SUCCESS, docsResponse);
     }catch (e) {
-        console.log("error", e);
+        return new Response(ResponseType.ERROR, e)
     }
 }
 

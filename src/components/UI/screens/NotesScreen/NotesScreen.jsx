@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react'
 import { TaskerAppContext } from '../../../data/AppContext/AppContext';
 import { useQuery } from '@tanstack/react-query';
-import { getTaskFromDB, getTaskFromDBPaginate } from '../../../data/Services/Api';
+import { getTaskFromDBPaginate } from '../../../data/Services/Api';
 import { STALE_TIME } from '../../../data/Utils/utils';
 import { ResponseType } from '../../../data/Utils/Strings';
 
@@ -9,7 +9,6 @@ import Loader from '../../UIComponents/Loader/Loader';
 import NotesItem from '../../UIComponents/NotesItem/NotesItem';
 import HorizontalCalander from '../../UIComponents/HorizontalCalander/HorizontalCalander';
 import ToastContainer, { ToastTypes } from '../../UIComponents/ToastContainer/ToastContainer';
-import { message } from 'antd';
 
 const NotesScreen = () => {
     const { userDetails } = useContext(TaskerAppContext);
@@ -32,7 +31,7 @@ const NotesScreen = () => {
         queryFn: () => getTaskFromDBPaginate(userDetails?.displayName),
         retryOnMount: true,
         enabled: isQueryEnabled,
-        staleTime: STALE_TIME,
+        staleTime: 0,
         refetchOnReconnect: true,
     });
 
@@ -43,13 +42,16 @@ const NotesScreen = () => {
     }, [userDetails])
 
     useEffect(() => {
-        console.log("tdata", taskData);
+        setNoteList([]);
         if(taskData?.responseType === ResponseType.SUCCESS) {
-            console.log(taskData?.response?.todos)
-            const taskTypes = taskData?.response?.todos;
-            setNoteList([
-                ...taskTypes.Chore,
-            ])
+            const tasksSnapshot = taskData?.response;
+            
+            tasksSnapshot?.docs?.forEach(async (taskItem) => {
+                const task = await taskItem.data();
+                setNoteList(taskList => {
+                    return [...taskList, task]
+                });
+            })    
         } else if(taskData?.responseType === ResponseType.ERROR) {
             setErrorToast(true);
             setToastDetails({

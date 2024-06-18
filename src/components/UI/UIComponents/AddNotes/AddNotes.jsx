@@ -15,7 +15,7 @@ import TaskStateSelector from './AddNotesComponents/TaskStateSelector/TaskStateS
 import PrivacySelector from './AddNotesComponents/PrivacySelector/PrivacySelector';
 import TagPicker from './AddNotesComponents/TagPicker/TagPicker';
 import ProgressPicker from './AddNotesComponents/ProgressPicker/ProgressPicker';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { v4 as uuidv4 } from 'uuid';
 import { addNewTaskToDB } from '../../../data/Services/Api';
 import { TaskerAppContext } from '../../../data/AppContext/AppContext';
@@ -23,6 +23,7 @@ import { TaskerAppContext } from '../../../data/AppContext/AppContext';
 const AddNotes = () => {
     const { isAddNotesOpen, setAddNotesOpen } = useContext(AddNotesContextInstance);
     const { userDetails } = useContext(TaskerAppContext);
+    const queryClient = useQueryClient();
 
     const {
         mutate: addTaskMutate,
@@ -32,8 +33,11 @@ const AddNotes = () => {
     } = useMutation({
         mutationFn: addNewTaskToDB,
         onSuccess: (responseData) => {
+            queryClient.invalidateQueries({ queryKey: ['getTaskQuery'] })
+
             if(responseData.responseType === ResponseType.SUCCESS) {
                 console.log("data-success", responseData);
+                
             } else {
                 console.log("data-error", responseData);
             }
@@ -86,11 +90,6 @@ const AddTaskForm = ({ handleNoteSubmit, isLoading = false }) => {
         taskDescription: "",
         taskProgress: {}
     })
-
-    // useEffect(() => {
-    //     console.log("taskdata", taskData);
-    // }, [taskData])
-    
 
     const updateTaskData = (type, info) => {
         setTaskData(taskInfo => {
