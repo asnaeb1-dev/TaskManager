@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react'
 import { TaskerAppContext } from '../../../data/AppContext/AppContext';
 import { useQuery } from '@tanstack/react-query';
-import { getTaskFromDB } from '../../../data/Services/Api';
+import { getTaskFromDB, getTaskFromDBPaginate } from '../../../data/Services/Api';
 import { STALE_TIME } from '../../../data/Utils/utils';
 import { ResponseType } from '../../../data/Utils/Strings';
 
@@ -29,7 +29,7 @@ const NotesScreen = () => {
         data: taskData
     } = useQuery({
         queryKey: ["getTaskQuery"],
-        queryFn: () => getTaskFromDB(userDetails?.displayName),
+        queryFn: () => getTaskFromDBPaginate(userDetails?.displayName),
         retryOnMount: true,
         enabled: isQueryEnabled,
         staleTime: STALE_TIME,

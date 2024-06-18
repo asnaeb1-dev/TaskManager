@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { AddNotesContextInstance } from '../../../data/AppContext/AddNotesContext'
 
-import { ADD_NOTE, APP_DESIGN_COLORS, NOTES_COLOR, TODO_TYPE, TODO_TYPES, TaskPriority } from '../../../data/Utils/Strings';
+import { ADD_NOTE, APP_DESIGN_COLORS, NOTES_COLOR, ResponseType, TODO_TYPE, TODO_TYPES, TaskPriority } from '../../../data/Utils/Strings';
 
 import { RxCross1 } from "react-icons/rx";
 import { Oval } from 'react-loader-spinner';
@@ -15,10 +15,33 @@ import TaskStateSelector from './AddNotesComponents/TaskStateSelector/TaskStateS
 import PrivacySelector from './AddNotesComponents/PrivacySelector/PrivacySelector';
 import TagPicker from './AddNotesComponents/TagPicker/TagPicker';
 import ProgressPicker from './AddNotesComponents/ProgressPicker/ProgressPicker';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { v4 as uuidv4 } from 'uuid';
+import { addNewTaskToDB } from '../../../data/Services/Api';
+import { TaskerAppContext } from '../../../data/AppContext/AppContext';
 
 const AddNotes = () => {
-    const { isAddNotesOpen, setAddNotesOpen, userTaskDetails, setUserTaskDetails } = useContext(AddNotesContextInstance)
+    const { isAddNotesOpen, setAddNotesOpen } = useContext(AddNotesContextInstance);
+    const { userDetails } = useContext(TaskerAppContext);
+
+    const {
+        mutate: addTaskMutate,
+        isError: addTaskHasError,
+        error: addTaskError,
+        isPending: addTaskIsPending,
+    } = useMutation({
+        mutationFn: addNewTaskToDB,
+        onSuccess: (responseData) => {
+            if(responseData.responseType === ResponseType.SUCCESS) {
+                console.log("data-success", responseData);
+            } else {
+                console.log("data-error", responseData);
+            }
+        }, 
+        onError: (responseData) => {
+            console.log(error);
+        }
+    })
 
     if (!isAddNotesOpen ) return null;
     return createPortal(
@@ -28,7 +51,7 @@ const AddNotes = () => {
         >
             <div className={`h-[90%] rounded-tr-lg bottom-0 w-full md:h-full lg:w-[500px] flex flex-col rounded-tl-lg rounded-bl-lg bg-white p-4 z-20 absolute animateSlideIn md:right-0`}>
                 <AddTaskHeader setAddNotesOpen={() => setAddNotesOpen(false)} />
-                <AddTaskForm />
+                <AddTaskForm isLoading={addTaskIsPending} handleNoteSubmit={taskData => addTaskMutate({username: userDetails?.displayName, taskData})}  />
             </div>
         </div>,
         document.getElementById("add-notes-portal")
@@ -48,12 +71,12 @@ const AddTaskHeader = ({ setAddNotesOpen }) => {
     )
 }
 
-const AddTaskForm = ({ handleNoteSubmit }) => {
+const AddTaskForm = ({ handleNoteSubmit, isLoading = false }) => {
 
     const [taskData, setTaskData] = useState({
         taskTitle: "",
         taskType: "",
-        taskId: `${Math.floor(Math.random() * 1000000)}-${Math.floor(Math.random() * 1000)}`,
+        taskId: `${uuidv4()}`,
         isTaskPrivate: false,
         taskPriority: TaskPriority.HIGH,
         taskNoteColor: "",
@@ -64,9 +87,10 @@ const AddTaskForm = ({ handleNoteSubmit }) => {
         taskProgress: {}
     })
 
-    useEffect(() => {
-        console.log("taskdata", taskData);
-    }, [taskData])
+    // useEffect(() => {
+    //     console.log("taskdata", taskData);
+    // }, [taskData])
+    
 
     const updateTaskData = (type, info) => {
         setTaskData(taskInfo => {
@@ -164,13 +188,13 @@ const AddTaskForm = ({ handleNoteSubmit }) => {
             </div>
             <TaskStateSelector />
             <div onClick={() => handleNoteSubmit(taskData)} className='flex absolute items-center bg-white h-14 bottom-0'>
-                <button className=' bg-yellow-500/50 px-5 py-2 rounded-lg font-semibold  hover:scale-105'>
+                <button className=' bg-yellow-500/50 px-7 py-3 rounded-lg font-semibold  hover:scale-105 hover:transition-transform'>
                     {
-                        !addTaskPending ?
+                        !isLoading ?
                             <p>{ADD_NOTE}</p> :
                             <span>
                                 <Oval
-                                    visible={addTaskPending}
+                                    visible={isLoading}
                                     height="20"
                                     width="20"
                                     color="white"
