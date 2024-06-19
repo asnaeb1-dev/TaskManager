@@ -33,8 +33,7 @@ const AddNotes = () => {
     } = useMutation({
         mutationFn: addNewTaskToDB,
         onSuccess: (responseData) => {
-            queryClient.invalidateQueries({ queryKey: ['getTaskQuery'] })
-
+            queryClient.invalidateQueries({ queryKey: ['getTaskQuery'] });
             if(responseData.responseType === ResponseType.SUCCESS) {
                 console.log("data-success", responseData);
                 
@@ -55,7 +54,7 @@ const AddNotes = () => {
         >
             <div className={`h-[90%] rounded-tr-lg bottom-0 w-full md:h-full lg:w-[500px] flex flex-col rounded-tl-lg rounded-bl-lg bg-white p-4 z-20 absolute animateSlideIn md:right-0`}>
                 <AddTaskHeader setAddNotesOpen={() => setAddNotesOpen(false)} />
-                <AddTaskForm isLoading={addTaskIsPending} handleNoteSubmit={taskData => addTaskMutate({username: userDetails?.displayName, taskData})}  />
+                <AddTaskForm isLoading={addTaskIsPending} handleNoteSubmit={taskData => console.log(taskData)}  />
             </div>
         </div>,
         document.getElementById("add-notes-portal")
@@ -85,15 +84,19 @@ const AddTaskForm = ({ handleNoteSubmit, isLoading = false }) => {
         taskPriority: TaskPriority.HIGH,
         taskNoteColor: "",
         taskTags: [],
-        taskStartTime: {},
-        taskEndTime: {},
+        taskStartTime: 0,
+        taskEndTime: 0,
         taskDescription: "",
-        taskProgress: {}
+        taskProgress: {},
+        createdAt: -1
     })
 
     const updateTaskData = (type, info) => {
         setTaskData(taskInfo => {
             const tempTaskInfo = {...taskInfo};
+            if(tempTaskInfo.createdAt === -1) {
+                tempTaskInfo.createdAt = Date.now();
+            }
             switch (type) {
                 case "title":
                     tempTaskInfo.taskTitle = info;

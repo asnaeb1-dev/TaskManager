@@ -31,7 +31,7 @@ const NotesScreen = () => {
         queryFn: () => getTaskFromDBPaginate(userDetails?.displayName),
         retryOnMount: true,
         enabled: isQueryEnabled,
-        staleTime: 0,
+        staleTime: STALE_TIME,
         refetchOnReconnect: true,
     });
 
